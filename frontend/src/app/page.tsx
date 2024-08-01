@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button'
+import { Eye } from 'lucide-react'
 import Link from 'next/link'
 
-import { Eye } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export default function Home() {
   return (
