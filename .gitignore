@@ -397,3 +397,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /backend/Chronos.Api/appsettings.json
+/backend/Chronos.Api/appsettings.json
