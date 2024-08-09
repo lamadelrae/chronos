@@ -1,49 +1,49 @@
 ﻿using Chronos.Api.Data;
 using Chronos.Api.Entities.Enums;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.InteropServices;
-namespace Chronos.Api.Handlers.Company
+
+namespace Chronos.Api.Handlers.Company;
+
+public interface IUpdateCompanyHandler
 {
-    public interface IUpdateCompanyHandler
+    Task Handle(Request request);
+
+    public record Request(Guid Id, string CompanyName, string SocialReason, string Cnpj, Request.RequestAddress Address)
     {
-        Task Handle(Request request);
-        public record Request(Guid id, string CompanyName, string SocialReason, string Cnpj, Request.Address Companyaddress)
+        public record RequestAddress(string Address, string City, State State, string ZipCode);
+    };
+}
+
+public class UpdateCompanyHandler(Context context) : IUpdateCompanyHandler
+{
+    public async Task Handle(IUpdateCompanyHandler.Request request)
+    {
+        Validate(request);
+
+        var company = await context.Set<Entities.Company>().FindAsync(request.Id) ?? throw new ValidationException("Company not found");
+
+        company.Name = request.CompanyName;
+        company.SocialReason = request.SocialReason;
+        company.Cnpj = request.Cnpj;
+
+        company.Address = new Entities.Company.CompanyAddress
         {
-            public record Address(string address, string city, State state, string zipCode);
+            Address = request.Address.Address,
+            City = request.Address.City,
+            State = request.Address.State,
+            ZipCode = request.Address.ZipCode,
         };
-        
+
+        context.Set<Entities.Company>().Update(company);
+        await context.SaveChangesAsync();
     }
-    public class UpdateCompanyHandler(Context context) : IUpdateCompanyHandler
+
+    private static void Validate(IUpdateCompanyHandler.Request request)
     {
-        private readonly Context _context = context;
-
-        public async Task Handle(IUpdateCompanyHandler.Request request)
-        {
-            Validate(request);
-            var company = await _context.Set<Entities.Company>().FindAsync(request.id) ?? throw new ValidationException("Company not found");
-            company.Name = request.CompanyName;
-            company.SocialReason = request.SocialReason;
-            company.Cnpj = request.Cnpj;
-            company.Address = new Entities.Company.CompanyAddress 
-            { 
-              Address = request.Companyaddress.address,
-              City = request.Companyaddress.city,
-              State = request.Companyaddress.state,
-              ZipCode = request.Companyaddress.zipCode,
-            };
-
-            _context.Set<Entities.Company>().Update(company);
-            await _context.SaveChangesAsync();
-        }
-
-        private static void Validate(IUpdateCompanyHandler.Request request)
-        {
-            if(request.id == Guid.Empty) throw new ValidationException("CompanyId should be valid.");
-            if (string.IsNullOrWhiteSpace(request.CompanyName)) throw new ValidationException("Name cannot be empty.");
-            if (string.IsNullOrWhiteSpace(request.SocialReason)) throw new ValidationException("Email cannot be empty.");
-            if (string.IsNullOrWhiteSpace(request.Cnpj)) throw new ValidationException("Password cannot be empty.");
-            if (request. == null) throw new ValidationException("Address cannot be empty.");
-        }
+        if (request.Id == Guid.Empty) throw new ValidationException("CompanyId should be valid.");
+        if (string.IsNullOrWhiteSpace(request.CompanyName)) throw new ValidationException("Name cannot be empty.");
+        if (string.IsNullOrWhiteSpace(request.SocialReason)) throw new ValidationException("Email cannot be empty.");
+        if (string.IsNullOrWhiteSpace(request.Cnpj)) throw new ValidationException("Password cannot be empty.");
+        if (request.Address == null) throw new ValidationException("Address cannot be empty.");
     }
 }
