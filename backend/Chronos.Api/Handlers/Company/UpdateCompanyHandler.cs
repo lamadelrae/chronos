@@ -1,12 +1,18 @@
 ﻿using Chronos.Api.Data;
+using Chronos.Api.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
 namespace Chronos.Api.Handlers.Company
 {
     public interface IUpdateCompanyHandler
     {
         Task Handle(Request request);
-        public record Request(Guid id, string CompanyName, string SocialReason, string Cnpj, Entities.Company.CompanyAddress Address); 
+        public record Request(Guid id, string CompanyName, string SocialReason, string Cnpj, Request.Address Companyaddress)
+        {
+            public record Address(string address, string city, State state, string zipCode);
+        };
+        
     }
     public class UpdateCompanyHandler(Context context) : IUpdateCompanyHandler
     {
@@ -19,7 +25,13 @@ namespace Chronos.Api.Handlers.Company
             company.Name = request.CompanyName;
             company.SocialReason = request.SocialReason;
             company.Cnpj = request.Cnpj;
-            company.Address = request.Address;
+            company.Address = new Entities.Company.CompanyAddress 
+            { 
+              Address = request.Companyaddress.address,
+              City = request.Companyaddress.city,
+              State = request.Companyaddress.state,
+              ZipCode = request.Companyaddress.zipCode,
+            };
 
             _context.Set<Entities.Company>().Update(company);
             await _context.SaveChangesAsync();
@@ -31,7 +43,7 @@ namespace Chronos.Api.Handlers.Company
             if (string.IsNullOrWhiteSpace(request.CompanyName)) throw new ValidationException("Name cannot be empty.");
             if (string.IsNullOrWhiteSpace(request.SocialReason)) throw new ValidationException("Email cannot be empty.");
             if (string.IsNullOrWhiteSpace(request.Cnpj)) throw new ValidationException("Password cannot be empty.");
-            if (request.Address == null) throw new ValidationException("Address cannot be empty.");
+            if (request. == null) throw new ValidationException("Address cannot be empty.");
         }
     }
 }
