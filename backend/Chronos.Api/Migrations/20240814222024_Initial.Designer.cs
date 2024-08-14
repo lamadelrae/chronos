@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chronos.Api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240807235521_Initial")]
+    [Migration("20240814222024_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -68,11 +68,6 @@ namespace Chronos.Api.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime>("LastUpdate")
                         .HasColumnType("datetime2");
