@@ -1,6 +1,9 @@
 using Chronos.Api.ApiConcerns;
 using Chronos.Api.Data;
 using Chronos.Api.Handlers.Auth;
+using Chronos.Api.Handlers.Company;
+using Chronos.Api.Handlers.Product;
+using Chronos.Api.Handlers.Sale;
 using Chronos.Api.Handlers.User;
 using Chronos.Api.Shared.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,7 +41,19 @@ builder.Services
     .AddScoped<ISaveUserHandler, SaveUserHandler>()
     .AddScoped<IFetchUserHandler, FetchUserHandler>()
     .AddScoped<IUpdateUserHandler, UpdateUserHandler>()
-    .AddScoped<IDeleteUserHandler, DeleteUserHandler>();
+    .AddScoped<IDeleteUserHandler, DeleteUserHandler>()
+    .AddScoped<ISaveCompanyHandler, SaveCompanyHandler>()
+    .AddScoped<IUpdateCompanyHandler, UpdateCompanyHandler>()
+    .AddScoped<IFetchCompanyHandler, FetchCompanyHandler>()
+    .AddScoped<IDeleteCompanyHandler, DeleteCompanyHandler>()
+    .AddScoped<ISaveProductHandler, SaveProductHandler>()
+    .AddScoped<IUpdateProductHandler, UpdateProductHandler>()
+    .AddScoped<IDeleteProductHandler, DeleteProductHandler>()
+    .AddScoped<IFetchProductHandler, FetchProductHandler>()
+    .AddScoped<ISaveSaleHandler, SaveSaleHandler>()
+    .AddScoped<IFetchSaleHandler, FetchSaleHandler>()
+    .AddScoped<IUpdateSaleHandler, UpdateSaleHandler>()
+    .AddScoped<IDeleteSaleHandler, DeleteSaleHandler>();
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 builder.Services
