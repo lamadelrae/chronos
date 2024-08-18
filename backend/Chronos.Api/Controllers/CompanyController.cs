@@ -10,7 +10,7 @@ public class CompanyController(
     ISaveCompanyHandler saveCompanyHandler,
     IUpdateCompanyHandler updateCompanyHandler,
     IDeleteCompanyHandler deleteCompanyHandler,
-    IFetchCompanyHandler fetchCompanyHandler) : ControllerBase
+    IFetchCompaniesHandler fetchCompaniesHandler) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> Save([FromBody] ISaveCompanyHandler.Request request)
@@ -29,11 +29,15 @@ public class CompanyController(
     }
 
     [Authorize]
-    [HttpGet("{id}")]
-    public async Task<IActionResult> FetchCompany([FromRoute] Guid id, [FromRoute] string? cnpj)
+    [HttpGet]
+    public async Task<IActionResult> FetchCompany(
+        [FromQuery] int page, 
+        [FromQuery] int size, 
+        [FromQuery] Guid? id, 
+        [FromQuery] string? cnpj)
     {
-        var request = new IFetchCompanyHandler.Request(id, cnpj);
-        var response = await fetchCompanyHandler.Handle(request);
+        var request = new IFetchCompaniesHandler.Request(page, size, id, cnpj);
+        var response = await fetchCompaniesHandler.Handle(request);
         return Ok(response);
     }
 

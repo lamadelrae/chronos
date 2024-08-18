@@ -36,24 +36,31 @@ builder.Services.AddSwaggerGen(options =>
         { new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Authorization" } }, Array.Empty<string>() }
     });
 });
+
+builder.Services.AddScoped<IAuthHandler, AuthHandler>();
 builder.Services
-    .AddScoped<IAuthHandler, AuthHandler>()
-    .AddScoped<ISaveUserHandler, SaveUserHandler>()
-    .AddScoped<IFetchUserHandler, FetchUserHandler>()
-    .AddScoped<IUpdateUserHandler, UpdateUserHandler>()
-    .AddScoped<IDeleteUserHandler, DeleteUserHandler>()
-    .AddScoped<ISaveCompanyHandler, SaveCompanyHandler>()
-    .AddScoped<IUpdateCompanyHandler, UpdateCompanyHandler>()
-    .AddScoped<IFetchCompanyHandler, FetchCompanyHandler>()
-    .AddScoped<IDeleteCompanyHandler, DeleteCompanyHandler>()
     .AddScoped<ISaveProductHandler, SaveProductHandler>()
     .AddScoped<IUpdateProductHandler, UpdateProductHandler>()
     .AddScoped<IDeleteProductHandler, DeleteProductHandler>()
-    .AddScoped<IFetchProductHandler, FetchProductHandler>()
+    .AddScoped<IFetchProductsHandler, FetchProductsHandler>();
+
+builder.Services
     .AddScoped<ISaveSaleHandler, SaveSaleHandler>()
-    .AddScoped<IFetchSaleHandler, FetchSaleHandler>()
+    .AddScoped<IFetchSalesHandler, FetchSalesHandler>()
     .AddScoped<IUpdateSaleHandler, UpdateSaleHandler>()
     .AddScoped<IDeleteSaleHandler, DeleteSaleHandler>();
+
+builder.Services
+    .AddScoped<ISaveUserHandler, SaveUserHandler>()
+    .AddScoped<IFetchUsersHandler, FetchUsersHandler>()
+    .AddScoped<IUpdateUserHandler, UpdateUserHandler>()
+    .AddScoped<IDeleteUserHandler, DeleteUserHandler>();
+
+builder.Services
+    .AddScoped<ISaveCompanyHandler, SaveCompanyHandler>()
+    .AddScoped<IFetchCompaniesHandler, FetchCompaniesHandler>()
+    .AddScoped<IUpdateCompanyHandler, UpdateCompanyHandler>()
+    .AddScoped<IDeleteCompanyHandler, DeleteCompanyHandler>();
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 builder.Services
