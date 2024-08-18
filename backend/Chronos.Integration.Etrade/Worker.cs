@@ -1,13 +1,10 @@
+using Chronos.Integration.Etrade.Handlers;
+
 namespace Chronos.Integration.Etrade;
 
-public class Worker : BackgroundService
+public class Worker(ILogger<Worker> logger, IProductSyncHandler productSync) : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
-
-    public Worker(ILogger<Worker> logger)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<Worker> _logger = logger;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -17,7 +14,10 @@ public class Worker : BackgroundService
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
             }
-            await Task.Delay(1000, stoppingToken);
+
+            await productSync.Handle();
+
+            await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
         }
     }
 }

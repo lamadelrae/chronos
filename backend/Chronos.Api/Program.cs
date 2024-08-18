@@ -42,25 +42,23 @@ builder.Services
     .AddScoped<ISaveProductHandler, SaveProductHandler>()
     .AddScoped<IUpdateProductHandler, UpdateProductHandler>()
     .AddScoped<IDeleteProductHandler, DeleteProductHandler>()
-    .AddScoped<IFetchProductHandler, FetchProductHandler>()
     .AddScoped<IFetchProductsHandler, FetchProductsHandler>();
 
 builder.Services
     .AddScoped<ISaveSaleHandler, SaveSaleHandler>()
-    .AddScoped<IFetchSaleHandler, FetchSaleHandler>()
     .AddScoped<IFetchSalesHandler, FetchSalesHandler>()
     .AddScoped<IUpdateSaleHandler, UpdateSaleHandler>()
     .AddScoped<IDeleteSaleHandler, DeleteSaleHandler>();
 
 builder.Services
     .AddScoped<ISaveUserHandler, SaveUserHandler>()
-    .AddScoped<IFetchUserHandler, FetchUsersHandler>()
+    .AddScoped<IFetchUsersHandler, FetchUsersHandler>()
     .AddScoped<IUpdateUserHandler, UpdateUserHandler>()
     .AddScoped<IDeleteUserHandler, DeleteUserHandler>();
 
 builder.Services
     .AddScoped<ISaveCompanyHandler, SaveCompanyHandler>()
-    .AddScoped<IFetchCompanyHandler, FetchCompanyHandler>()
+    .AddScoped<IFetchCompaniesHandler, FetchCompaniesHandler>()
     .AddScoped<IUpdateCompanyHandler, UpdateCompanyHandler>()
     .AddScoped<IDeleteCompanyHandler, DeleteCompanyHandler>();
 
