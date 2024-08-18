@@ -9,6 +9,7 @@ public class ProductController(
     ISaveProductHandler saveProductHandler,
     IDeleteProductHandler deleteProductHandler,
     IFetchProductHandler fetchProductHandler,
+    IFetchProductsHandler fetchProductsHandler,
     IUpdateProductHandler updateProductHandler) : ControllerBase
 {
     [HttpPost]
@@ -31,6 +32,14 @@ public class ProductController(
     {
         var request = new IFetchProductHandler.Request(id, name);
         var response = await fetchProductHandler.Handle(request);
+        return Ok(response);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> FetchAll([FromQuery] int page, [FromQuery] int size)
+    {
+        var request = new IFetchProductsHandler.Request(page, size);
+        var response = await fetchProductsHandler.Handle(request);
         return Ok(response);
     }
 
