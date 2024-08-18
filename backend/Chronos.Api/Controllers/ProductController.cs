@@ -8,15 +8,14 @@ namespace Chronos.Api.Controllers;
 public class ProductController(
     ISaveProductHandler saveProductHandler,
     IDeleteProductHandler deleteProductHandler,
-    IFetchProductHandler fetchProductHandler,
     IFetchProductsHandler fetchProductsHandler,
     IUpdateProductHandler updateProductHandler) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> Save([FromBody] ISaveProductHandler.Request request)
     {
-        await saveProductHandler.Handle(request);
-        return Created();
+        var response = await saveProductHandler.Handle(request);
+        return Created("created", response);
     }
 
     [HttpDelete("{id}")]
@@ -27,18 +26,10 @@ public class ProductController(
         return Ok();
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Fetch([FromRoute] Guid id, string? name)
-    {
-        var request = new IFetchProductHandler.Request(id, name);
-        var response = await fetchProductHandler.Handle(request);
-        return Ok(response);
-    }
-
     [HttpGet]
-    public async Task<IActionResult> FetchAll([FromQuery] int page, [FromQuery] int size)
+    public async Task<IActionResult> Fetch([FromQuery] int page, [FromQuery] int size, [FromQuery] Guid[]? ids)
     {
-        var request = new IFetchProductsHandler.Request(page, size);
+        var request = new IFetchProductsHandler.Request(page, size, ids);
         var response = await fetchProductsHandler.Handle(request);
         return Ok(response);
     }

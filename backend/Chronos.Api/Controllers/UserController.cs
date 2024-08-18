@@ -9,7 +9,7 @@ namespace Chronos.Api.Controllers;
 public class UserController(
     ISaveUserHandler saveUserHandler,
     IDeleteUserHandler deleteUserHandler,
-    IFetchUserHandler fetchUserHandler,
+    IFetchUsersHandler fetchUsersHandler,
     IUpdateUserHandler updateUserHandler) : ControllerBase
 {
     [HttpPost]
@@ -29,11 +29,11 @@ public class UserController(
     }
 
     [Authorize]
-    [HttpGet("{userId}")]
-    public async Task<IActionResult> FetchUser([FromRoute] Guid userId)
+    [HttpGet]
+    public async Task<IActionResult> FetchUser([FromQuery] int page, [FromQuery] int size, [FromQuery] Guid? id)
     {
-        var request = new IFetchUserHandler.Request(userId);
-        var response = await fetchUserHandler.Handle(request);
+        var request = new IFetchUsersHandler.Request(page, size, id);
+        var response = await fetchUsersHandler.Handle(request);
         return Ok(response);
     }
 

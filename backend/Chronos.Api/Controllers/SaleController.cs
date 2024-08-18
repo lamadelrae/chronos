@@ -8,7 +8,6 @@ namespace Chronos.Api.Controllers;
 public class SaleController(
     ISaveSaleHandler saveSaleHandler,
     IDeleteSaleHandler deleteSaleHandler,
-    IFetchSaleHandler fetchSaleHandler,
     IFetchSalesHandler fetchSalesHandler,
     IUpdateSaleHandler updateSaleHandler) : ControllerBase
 {
@@ -25,14 +24,6 @@ public class SaleController(
         var request = new IDeleteSaleHandler.Request(id);
         await deleteSaleHandler.Handle(request);
         return Ok();
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Fetch([FromRoute] Guid id)
-    {
-        var request = new IFetchSaleHandler.Request(id);
-        var response = await fetchSaleHandler.Handle(request);
-        return Ok(response);
     }
 
     [HttpGet]

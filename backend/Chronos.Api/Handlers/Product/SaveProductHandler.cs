@@ -1,19 +1,19 @@
 ﻿using Chronos.Api.Data;
-using Chronos.Api.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace Chronos.Api.Handlers.Product;
 
 public interface ISaveProductHandler
 {
-    Task Handle(Request request);
+    Task<Response> Handle(Request request);
 
     public record Request(Guid CompanyId, string Name, decimal Price);
+    public record Response(Guid Id);
 }
 
 public class SaveProductHandler(Context context) : ISaveProductHandler
 {
-    public async Task Handle(ISaveProductHandler.Request request)
+    public async Task<ISaveProductHandler.Response> Handle(ISaveProductHandler.Request request)
     {
         Validate(request);
 
@@ -27,6 +27,8 @@ public class SaveProductHandler(Context context) : ISaveProductHandler
 
         await context.Set<Entities.Product>().AddAsync(product);
         await context.SaveChangesAsync();
+
+        return new ISaveProductHandler.Response(product.Id);
     }
 
     private static void Validate(ISaveProductHandler.Request request)

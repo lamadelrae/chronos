@@ -54,7 +54,7 @@ builder.Services
 
 builder.Services
     .AddScoped<ISaveUserHandler, SaveUserHandler>()
-    .AddScoped<IFetchUserHandler, FetchUserHandler>()
+    .AddScoped<IFetchUserHandler, FetchUsersHandler>()
     .AddScoped<IUpdateUserHandler, UpdateUserHandler>()
     .AddScoped<IDeleteUserHandler, DeleteUserHandler>();
 
