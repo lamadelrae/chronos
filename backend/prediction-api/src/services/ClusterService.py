@@ -16,8 +16,8 @@ def cluster_products(df):
     df['cluster'] = kmeans.fit_predict(X_scaled)
     
     # Save the KMeans model and scaler
-    joblib.dump(kmeans, 'kmeans_model.pkl')
-    joblib.dump(scaler, 'scaler.pkl')
+    joblib.dump(kmeans, 'models/kmeans_model.pkl')
+    joblib.dump(scaler, 'models/scaler.pkl')
     
     return df
 
@@ -29,7 +29,7 @@ def train_cluster_model(df_cluster, cluster):
     model.fit(X, y)
     
     # Save the cluster model
-    joblib.dump(model, f'cluster_model_{cluster}.pkl')
+    joblib.dump(model, f'models/cluster_model_{cluster}.pkl')
     print(f"Model trained for cluster: {cluster}")
 
 def predict_for_cluster(df_cluster):
@@ -41,7 +41,7 @@ def predict_for_cluster(df_cluster):
         cluster = row['cluster']
         
         # Load the cluster model and make the prediction
-        model = joblib.load(f'cluster_model_{cluster}.pkl')
+        model = joblib.load(f'models/cluster_model_{cluster}.pkl')
         prediction = model.predict(X)[0]
         predictions.append({
             'product': row['product'],
