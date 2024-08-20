@@ -1,5 +1,5 @@
 import pandas as pd
-from services.ClusterService import cluster_products, train_cluster_model, predict_for_cluster
+from services.ClusterService import cluster_products, train_cluster_model, predict_for_cluster, plot_clusters
 import json
 
 def generate_predictions():
@@ -27,5 +27,7 @@ def generate_predictions():
     cluster_predictions = predict_for_cluster(df_clustered)
     predictions_json = json.dumps(cluster_predictions)
     print(predictions_json)
+
+    plot_clusters(df_clustered)
 
     return cluster_predictions

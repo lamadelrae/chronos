@@ -1,11 +1,13 @@
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+import seaborn as sns; sns.set() # plot styling
 import joblib
 
 def cluster_products(df):
     # Prepare data for clustering
-    X_cluster = df[['unit_price', 'sales_quantity']]
+    X_cluster = df[['unit_price', 'month' , 'year', 'sales_quantity']]
     
     # Normalize the data
     scaler = StandardScaler()
@@ -50,3 +52,18 @@ def predict_for_cluster(df_cluster):
         })
     
     return predictions    
+
+def plot_clusters(df):
+    plt.figure(figsize=(8, 6))
+    
+    # Plot each cluster with a different color
+    for cluster in df['cluster'].unique():
+        cluster_data = df[df['cluster'] == cluster]
+        plt.scatter(cluster_data['month'], cluster_data['sales_quantity'], label=f'Cluster {cluster}', cmap='viridis')
+    
+    # Add labels and title
+    plt.xlabel('Mês')
+    plt.ylabel('Vendas')
+    plt.title('Clusters of Products')
+    plt.legend()
+    plt.show()
