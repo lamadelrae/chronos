@@ -1,0 +1,41 @@
+services:
+  chronos-ui:
+    build: 
+      context: ./frontend/
+    ports:
+      - 3000:3000
+  chronos-app-api:
+    build:
+      context: ./backend/app/Chronos.Api/
+    depends_on:
+      mssql:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ConnectionStrings:Chronos=Server=mssql;Database=Chronos;User Id=sa;Password=${MSSQL_PASSWORD};TrustServerCertificate=True;
+    ports:
+      - 5001:5000
+  chronos-app-integration:
+    build:
+      context: ./backend/app/Chronos.Integration.Etrade/
+  chronos-data-science:
+    build:
+      context: ./backend/data-science/src/
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "/opt/mssql-tools/bin/sqlcmd",
+          "-Usa",
+          "-P${MSSQL_PASSWORD}",
+          "-Q",
+          "select 1",
+        ]
+      interval: 1s
+      retries: 30
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${MSSQL_PASSWORD}
+    ports:
+      - "14333:1433"
