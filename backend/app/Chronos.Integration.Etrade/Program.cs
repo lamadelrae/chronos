@@ -6,7 +6,7 @@ using Chronos.Integration.Etrade.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddHostedService<Worker>();\
+builder.Services.AddHostedService<Worker>();
 
 builder.Services.AddHttpClient("Chronos", options => 
 {
