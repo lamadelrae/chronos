@@ -2,7 +2,7 @@ using Chronos.Integration.Etrade.Handlers;
 
 namespace Chronos.Integration.Etrade;
 
-public class Worker(ILogger<Worker> logger, IProductSyncHandler productSync) : BackgroundService
+public class Worker(ILogger<Worker> logger, IProductSyncHandler productSync, ISaleSyncHandler saleSync) : BackgroundService
 {
     private readonly ILogger<Worker> _logger = logger;
 
@@ -16,6 +16,7 @@ public class Worker(ILogger<Worker> logger, IProductSyncHandler productSync) : B
             }
 
             await productSync.Handle();
+            await saleSync.Handle();
 
             await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
         }

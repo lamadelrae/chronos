@@ -2,7 +2,4 @@
 
 namespace Chronos.Integration.Etrade.Data.Integration;
 
-public class IntegrationContext : DbContext
-{
-
-}
+public class IntegrationContext : DbContext;

@@ -17,12 +17,15 @@ builder.Services.AddDbContext<EtradeContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetValue<string?>("Etrade:Connection"));
 });
-builder.Services.AddScoped<IChronosProductService, ChronosProductService>();
-builder.Services.AddScoped<IProductSyncHandler, ProductSyncHandler>();
+
 builder.Services.AddDbContext<IntegrationContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetValue<string?>("Integration:Connection"));
 });
+
+builder.Services.AddScoped<IChronosProductService, ChronosProductService>();
+builder.Services.AddScoped<IProductSyncHandler, ProductSyncHandler>();
+builder.Services.AddScoped<ISaleSyncHandler, SaleSyncHandler>();
 
 var host = builder.Build();
 host.Run();

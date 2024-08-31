@@ -5,7 +5,6 @@ using Chronos.Integration.Etrade.Models.Integration;
 using Chronos.Integration.Etrade.Services;
 using Chronos.Integration.Etrade.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 
 namespace Chronos.Integration.Etrade.Handlers;
 
@@ -61,7 +60,7 @@ public class ProductSyncHandler(
                 var synced = kvp.Key;
                 var product = kvp.Value;
 
-                var success = await service.Put(new IChronosProductService.UpdateProduct(product.Id, product.Name, product.Price));
+                var success = await service.Put(new IChronosProductService.UpdateProduct(synced.ChronosId, product.Name, product.Price));
                 if (!success)
                 {
                     continue;
@@ -89,7 +88,7 @@ public class ProductSyncHandler(
 	        WHERE TP.Custo = 0 AND P.Inativo = 0
 	        ORDER BY P.Id";
 
-        return await etradeContext.Database.SqlQuery<Product>(FormattableStringFactory.Create(sql)).ToListAsync();
+        return await etradeContext.Database.SqlQueryRaw<Product>(sql).ToListAsync();
     }
 
     private static List<Product> ToCreate(List<SyncedProduct> synced, List<Product> products)
@@ -101,6 +100,7 @@ public class ProductSyncHandler(
     {
         var response = new List<KeyValuePair<SyncedProduct, Product>>();
         var outdatedSynced = synced.Where(product => product.LastUpdate < DateTime.Now.AddDays(-1));
+
         foreach (var outdated in outdatedSynced)
         {
             var match = products.FirstOrDefault(product => product.Id == outdated.EtradeId);

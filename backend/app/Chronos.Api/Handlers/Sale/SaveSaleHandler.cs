@@ -8,9 +8,9 @@ public interface ISaveSaleHandler
 {
     Task Handle(Request request);
 
-    public record Request(Guid CompanyId, DateTime Date, decimal Total, List<SaleItem> Items)
+    public record Request(Guid CompanyId, DateTime Date, decimal Total, List<Request.SaleItem> Items)
     {
-        public record SaleItem(Guid ProductId, int Quantity, decimal Price, decimal Total);
+        public record SaleItem(Guid ProductId, decimal Quantity, decimal Price, decimal Total);
     };
 }
 
