@@ -21,6 +21,7 @@ public class UpdateProductHandler(Context context) : IUpdateProductHandler
 
         product.Name = request.Name;
         product.Price = request.Price;
+        product.LastUpdate = DateTime.Now;
 
         context.Set<Entities.Product>().Update(product);
         await context.SaveChangesAsync();

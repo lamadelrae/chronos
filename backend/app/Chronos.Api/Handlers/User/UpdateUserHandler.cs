@@ -21,6 +21,7 @@ public class UpdateUserHandler(Context context) : IUpdateUserHandler
         var user = await _context.Set<Entities.User>().FindAsync(request.UserId) ?? throw new ValidationException("User not found.");
         user.Name = request.Name;
         user.Email = request.Email;
+        user.LastUpdate = DateTime.Now;
 
         _context.Set<Entities.User>().Update(user);
         await _context.SaveChangesAsync();

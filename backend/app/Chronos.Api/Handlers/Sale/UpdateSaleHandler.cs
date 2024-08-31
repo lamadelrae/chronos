@@ -27,10 +27,13 @@ public class UpdateSaleHandler(Context context) : IUpdateSaleHandler
 
         sale.Date = request.Date;
         sale.Total = request.Total;
+        sale.LastUpdate = DateTime.Now;
         sale.Items = request.Items
             .Select(item => new Entities.SaleItem
             {
                 Id = Guid.NewGuid(),
+                CreatedAt = DateTime.Now,
+                LastUpdate = DateTime.Now,
                 ProductId = item.ProductId,
                 Quantity = item.Quantity,
                 Price = item.Price,

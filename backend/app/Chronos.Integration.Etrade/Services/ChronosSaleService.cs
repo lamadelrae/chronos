@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 
 namespace Chronos.Integration.Etrade.Services;
@@ -12,12 +13,11 @@ public interface IChronosSaleService
     {
         public record SaleItem(Guid ProductId, decimal Quantity, decimal Price, decimal Total);
     }
-    record CreateSaleResponse(Guid Id);
 
+    record CreateSaleResponse(Guid Id);
     record UpdateSaleRequest(Guid Id, DateTime Date, decimal Total, IEnumerable<UpdateSaleRequest.SaleItem> Items)
     {
         public record SaleItem(Guid ProductId, decimal Quantity, decimal Price, decimal Total);
-
     }
 }
 
@@ -28,7 +28,7 @@ public class ChronosSaleService(IHttpClientFactory factory) : IChronosSaleServic
         var client = factory.CreateClient("Chronos");
         var request = new HttpRequestMessage(HttpMethod.Post, "api/sale")
         {
-            Content = new StringContent(JsonSerializer.Serialize(sale))
+            Content = new StringContent(JsonSerializer.Serialize(sale), Encoding.UTF8, "application/json")
         };
 
         var response = await client.SendAsync(request);
@@ -45,7 +45,7 @@ public class ChronosSaleService(IHttpClientFactory factory) : IChronosSaleServic
         var client = factory.CreateClient("Chronos");
         var request = new HttpRequestMessage(HttpMethod.Put, "api/sale")
         {
-            Content = new StringContent(JsonSerializer.Serialize(sale))
+            Content = new StringContent(JsonSerializer.Serialize(sale), Encoding.UTF8, "application/json")
         };
         var response = await client.SendAsync(request);
         return response.IsSuccessStatusCode;

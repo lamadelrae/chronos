@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 
 namespace Chronos.Integration.Etrade.Services;
@@ -20,7 +21,7 @@ public class ChronosProductService(IHttpClientFactory factory) : IChronosProduct
         var client = factory.CreateClient("Chronos");
         var request = new HttpRequestMessage(HttpMethod.Post, "api/product")
         {
-            Content = new StringContent(JsonSerializer.Serialize(product))
+            Content = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json")
         };
 
         var response = await client.SendAsync(request);
@@ -37,7 +38,7 @@ public class ChronosProductService(IHttpClientFactory factory) : IChronosProduct
         var client = factory.CreateClient("Chronos");
         var request = new HttpRequestMessage(HttpMethod.Put, "api/product")
         {
-            Content = new StringContent(JsonSerializer.Serialize(product))
+            Content = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json")
         };
         var response = await client.SendAsync(request);
         return response.IsSuccessStatusCode;

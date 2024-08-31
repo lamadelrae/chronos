@@ -6,17 +6,18 @@ namespace Chronos.Api.Handlers.Sale;
 
 public interface ISaveSaleHandler
 {
-    Task Handle(Request request);
+    Task<Response> Handle(Request request);
 
     public record Request(Guid CompanyId, DateTime Date, decimal Total, List<Request.SaleItem> Items)
     {
         public record SaleItem(Guid ProductId, decimal Quantity, decimal Price, decimal Total);
     };
+    public record Response(Guid Id);
 }
 
 public class SaveSaleHandler(Context context) : ISaveSaleHandler
 {
-    public async Task Handle(ISaveSaleHandler.Request request)
+    public async Task<ISaveSaleHandler.Response> Handle(ISaveSaleHandler.Request request)
     {
         Validate(request);
 
@@ -38,6 +39,8 @@ public class SaveSaleHandler(Context context) : ISaveSaleHandler
 
         await context.Set<Entities.Sale>().AddAsync(sale);
         await context.SaveChangesAsync();
+
+        return new ISaveSaleHandler.Response(sale.Id);
     }
 
     private static void Validate(ISaveSaleHandler.Request request)

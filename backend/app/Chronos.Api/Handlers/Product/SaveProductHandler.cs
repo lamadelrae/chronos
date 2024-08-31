@@ -22,7 +22,9 @@ public class SaveProductHandler(Context context) : ISaveProductHandler
             Id = Guid.NewGuid(),
             CompanyId = request.CompanyId,
             Name = request.Name,
-            Price = request.Price
+            Price = request.Price,
+            CreatedAt = DateTime.Now,
+            LastUpdate = DateTime.Now
         };
 
         await context.Set<Entities.Product>().AddAsync(product);
