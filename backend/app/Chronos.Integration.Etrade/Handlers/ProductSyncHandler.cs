@@ -38,7 +38,7 @@ public class ProductSyncHandler(
         }
     }
 
-    private async Task<List<Product>> GetAllProducts()
+    private async Task<IEnumerable<Product>> GetAllProducts()
     {
         var sql = @"
 	        SELECT 
@@ -54,9 +54,9 @@ public class ProductSyncHandler(
         return await etradeContext.Database.SqlQueryRaw<Product>(sql).ToListAsync();
     }
 
-    private static List<Product> ToCreate(List<SyncedProduct> synced, List<Product> products)
+    private static IEnumerable<Product> ToCreate(IEnumerable<SyncedProduct> synced, IEnumerable<Product> products)
     {
-        return products.Where(product => !synced.Any(synced => synced.EtradeId == product.Id)).ToList();
+        return products.Where(product => !synced.Any(synced => synced.EtradeId == product.Id));
     }
 
     public async Task CreateAll(IEnumerable<Product> products)
@@ -88,7 +88,7 @@ public class ProductSyncHandler(
         }
     }
 
-    private static List<KeyValuePair<SyncedProduct, Product>> ToUpdate(List<SyncedProduct> synced, List<Product> products)
+    private static IEnumerable<KeyValuePair<SyncedProduct, Product>> ToUpdate(IEnumerable<SyncedProduct> synced, IEnumerable<Product> products)
     {
         var response = new List<KeyValuePair<SyncedProduct, Product>>();
         var outdatedSynced = synced.Where(product => product.LastUpdate < DateTime.Now.AddDays(-5));
@@ -102,10 +102,10 @@ public class ProductSyncHandler(
             }
         }
 
-        return response;
+        return response.AsEnumerable();
     }
 
-    public async Task UpdateAll(List<KeyValuePair<SyncedProduct, Product>> products)
+    public async Task UpdateAll(IEnumerable<KeyValuePair<SyncedProduct, Product>> products)
     {
         foreach (var kvp in products)
         {
