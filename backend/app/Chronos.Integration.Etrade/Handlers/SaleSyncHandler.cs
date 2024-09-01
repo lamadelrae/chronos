@@ -15,6 +15,7 @@ public interface ISaleSyncHandler
 }
 
 public class SaleSyncHandler(
+    ILastSyncService lastSyncService,
     IChronosSaleService saleService,
     IConfiguration config,
     EtradeContext etradeContext,
@@ -24,7 +25,8 @@ public class SaleSyncHandler(
 
     public async Task Handle()
     {
-        var lastSync = await GetLastSync();
+        var lastSync = await lastSyncService.Get();
+
         var toSync = (await GetAllSalesAsync(lastSync)).ToBatchesOf(1000);
         var syncedProducts = await GetAllSyncedProducts();
 
@@ -38,8 +40,6 @@ public class SaleSyncHandler(
 
             await CreateAll(syncedProducts, ToCreate(syncedSales, batch));
         }
-
-        await SetLastSync();
     }
 
     private async Task<IEnumerable<Sale>> GetAllSalesAsync(DateTime lastSync)
@@ -73,27 +73,6 @@ public class SaleSyncHandler(
                     Total = record.SaleItemTotal
                 }).ToList()
             }).ToList();
-    }
-
-    public async Task<DateTime> GetLastSync()
-    {
-        var lastSync = await integrationContext.Set<LastSync>().FirstOrDefaultAsync();
-
-        if (lastSync == null)
-        {
-            lastSync = new LastSync { Value = DateTime.Now.AddYears(-4) };
-            await integrationContext.Set<LastSync>().AddAsync(lastSync);
-            await integrationContext.SaveChangesAsync();
-        }
-
-        return lastSync.Value;
-    }
-
-    public async Task SetLastSync()
-    {
-        var lastSync = await integrationContext.Set<LastSync>().FirstAsync();
-        lastSync.Value = DateTime.Now;
-        await integrationContext.SaveChangesAsync();
     }
 
     private async Task<Dictionary<Guid, Guid>> GetAllSyncedProducts()

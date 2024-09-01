@@ -42,6 +42,7 @@ builder.Services.AddDbContext<IntegrationContext>(options =>
     options.UseSqlite(builder.Configuration.GetValue<string?>("Integration:Connection"));
 });
 
+builder.Services.AddScoped<ILastSyncService, LastSyncService>();
 builder.Services.AddScoped<IChronosProductService, ChronosProductService>();
 builder.Services.AddScoped<IChronosSaleService, ChronosSaleService>();
 builder.Services.AddScoped<IProductSyncHandler, ProductSyncHandler>();
