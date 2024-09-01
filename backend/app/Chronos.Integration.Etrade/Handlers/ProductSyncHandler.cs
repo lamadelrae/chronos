@@ -33,45 +33,8 @@ public class ProductSyncHandler(
                 .Where(synced => ids.Contains(synced.EtradeId))
                 .ToListAsync();
 
-            var toCreate = ToCreate(syncedProducts, batch);
-            var toUpdate = ToUpdate(syncedProducts, batch);
-
-            foreach (var product in toCreate)
-            {
-                var chronosId = (await service.Post(new IChronosProductService.CreateProductRequest(CompanyId, product.Name, product.Price)))?.Id;
-                if (chronosId == null)
-                {
-                    continue;
-                }
-
-                await integrationContext.Set<SyncedProduct>()
-                    .AddAsync(new SyncedProduct
-                    {
-                        ChronosId = chronosId.Value,
-                        EtradeId = product.Id,
-                        LastUpdate = DateTime.Now
-                    });
-
-                await integrationContext.SaveChangesAsync();
-            }
-
-            foreach (var kvp in toUpdate)
-            {
-                var synced = kvp.Key;
-                var product = kvp.Value;
-
-                var success = await service.Put(new IChronosProductService.UpdateProduct(synced.ChronosId, product.Name, product.Price));
-                if (!success)
-                {
-                    continue;
-                }
-
-                synced.LastUpdate = DateTime.Now;
-                integrationContext.Set<SyncedProduct>()
-                   .Update(synced);
-
-                await integrationContext.SaveChangesAsync();
-            }
+            await CreateAll(ToCreate(syncedProducts, batch));
+            await UpdateAll(ToUpdate(syncedProducts, batch));
         }
     }
 
@@ -96,10 +59,39 @@ public class ProductSyncHandler(
         return products.Where(product => !synced.Any(synced => synced.EtradeId == product.Id)).ToList();
     }
 
+    public async Task CreateAll(IEnumerable<Product> products)
+    {
+        foreach (var product in products)
+        {
+            try
+            {
+                var chronosId = (await service.Post(new IChronosProductService.CreateProductRequest(CompanyId, product.Name, product.Price)))?.Id;
+                if (chronosId == null)
+                {
+                    continue;
+                }
+
+                await integrationContext.Set<SyncedProduct>()
+                    .AddAsync(new SyncedProduct
+                    {
+                        ChronosId = chronosId.Value,
+                        EtradeId = product.Id,
+                        LastUpdate = DateTime.Now
+                    });
+
+                await integrationContext.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                continue;
+            }
+        }
+    }
+
     private static List<KeyValuePair<SyncedProduct, Product>> ToUpdate(List<SyncedProduct> synced, List<Product> products)
     {
         var response = new List<KeyValuePair<SyncedProduct, Product>>();
-        var outdatedSynced = synced.Where(product => product.LastUpdate < DateTime.Now.AddDays(-1));
+        var outdatedSynced = synced.Where(product => product.LastUpdate < DateTime.Now.AddDays(-5));
 
         foreach (var outdated in outdatedSynced)
         {
@@ -111,5 +103,33 @@ public class ProductSyncHandler(
         }
 
         return response;
+    }
+
+    public async Task UpdateAll(List<KeyValuePair<SyncedProduct, Product>> products)
+    {
+        foreach (var kvp in products)
+        {
+            try
+            {
+                var synced = kvp.Key;
+                var product = kvp.Value;
+
+                var success = await service.Put(new IChronosProductService.UpdateProduct(synced.ChronosId, product.Name, product.Price));
+                if (!success)
+                {
+                    continue;
+                }
+
+                synced.LastUpdate = DateTime.Now;
+                integrationContext.Set<SyncedProduct>()
+                   .Update(synced);
+
+                await integrationContext.SaveChangesAsync();
+            }
+            catch(Exception)
+            {
+                continue;
+            }
+        }
     }
 }

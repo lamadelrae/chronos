@@ -4,9 +4,28 @@ using Chronos.Integration.Etrade.Data.Integration;
 using Chronos.Integration.Etrade.Handlers;
 using Chronos.Integration.Etrade.Services;
 using Microsoft.EntityFrameworkCore;
+using Quartz;
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddHostedService<Worker>();
+
+builder.Services.AddQuartz(q =>
+{
+    var key = new JobKey("Job");
+
+    q.AddJob<Job>(j => j
+    .WithIdentity(key)
+    .Build());
+
+    q.AddTrigger(t => t.ForJob(key)
+    .WithIdentity("Job-trigger")
+    .WithSchedule(CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Monday, 2, 0)));
+
+    q.AddTrigger(t => t.ForJob(key)
+    .WithIdentity("Job-now-trigger")
+    .StartNow());
+});
+
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 builder.Services.AddHttpClient("Chronos", options =>
 {

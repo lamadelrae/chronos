@@ -13,7 +13,8 @@ public static class IEnumerableExtensions
 
         var batches = new List<List<T>>();
 
-        for (var i = 0; i < items.Count(); i += batchSize)
+        var count = items.Count();
+        for (var i = 0; i < count; i += batchSize)
         {
             List<T> batch = items.Skip(i).Take(batchSize).ToList();
             batches.Add(batch);

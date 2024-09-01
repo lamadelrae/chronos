@@ -24,12 +24,16 @@ public class SaveSaleHandler(Context context) : ISaveSaleHandler
         var sale = new Entities.Sale
         {
             Id = Guid.NewGuid(),
+            LastUpdate = DateTime.Now,
+            CreatedAt = DateTime.Now,
             CompanyId = request.CompanyId,
             Date = request.Date,
             Total = request.Total,
             Items = request.Items.Select(i => new SaleItem
             {
                 Id = Guid.NewGuid(),
+                LastUpdate = DateTime.Now,
+                CreatedAt = DateTime.Now,
                 ProductId = i.ProductId,
                 Quantity = i.Quantity,
                 Price = i.Price,
@@ -47,6 +51,6 @@ public class SaveSaleHandler(Context context) : ISaveSaleHandler
     {
         if (request.CompanyId == Guid.Empty) throw new ValidationException("CompanyId cannot be empty.");
         if (request.Items == null || !request.Items.Any()) throw new ValidationException("Sale must contain at least one item.");
-        if (request.Total <= 0) throw new ValidationException("Total must be greater than zero.");
+        if (request.Total < 0) throw new ValidationException("Total must be greater than or equal to zero.");
     }
 }

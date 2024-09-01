@@ -50,6 +50,6 @@ public class UpdateSaleHandler(Context context) : IUpdateSaleHandler
     {
         if (request.Id == Guid.Empty) throw new ValidationException("SaleId should be valid.");
         if (request.Items == null || !request.Items.Any()) throw new ValidationException("Sale must contain at least one item.");
-        if (request.Total <= 0) throw new ValidationException("Total must be greater than zero.");
+        if (request.Total < 0) throw new ValidationException("Total must be greater than or equal to zero.");
     }
 }

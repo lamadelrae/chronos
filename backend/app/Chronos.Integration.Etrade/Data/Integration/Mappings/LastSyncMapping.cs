@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Chronos.Integration.Etrade.Data.Integration.Mappings;
 
-public class SyncedSaleMapping : IEntityTypeConfiguration<SyncedSale>
+public class LastSyncMapping : IEntityTypeConfiguration<LastSync>
 {
-    public void Configure(EntityTypeBuilder<SyncedSale> builder)
+    public void Configure(EntityTypeBuilder<LastSync> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(e => e.Id);
+        builder.Property(e => e.Value).IsRequired();
     }
 }

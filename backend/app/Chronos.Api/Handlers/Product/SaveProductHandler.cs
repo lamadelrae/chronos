@@ -37,6 +37,6 @@ public class SaveProductHandler(Context context) : ISaveProductHandler
     {
         if (request.CompanyId == Guid.Empty) throw new ValidationException("CompanyId cannot be empty.");
         if (string.IsNullOrWhiteSpace(request.Name)) throw new ValidationException("Name cannot be empty.");
-        if (request.Price <= 0) throw new ValidationException("Price must be greater than zero.");
+        if (request.Price < 0) throw new ValidationException("Price must be greater than or equal than zero.");
     }
 }

@@ -9,5 +9,6 @@ public class IntegrationContext(DbContextOptions<IntegrationContext> options) : 
     {
         modelBuilder.ApplyConfiguration(new SyncedProductMapping());
         modelBuilder.ApplyConfiguration(new SyncedSaleMapping());
+        modelBuilder.ApplyConfiguration(new LastSyncMapping());
     }
 }
