@@ -21,6 +21,7 @@ public class UpdateProductHandler(Context context) : IUpdateProductHandler
 
         product.Name = request.Name;
         product.Price = request.Price;
+        product.LastUpdate = DateTime.Now;
 
         context.Set<Entities.Product>().Update(product);
         await context.SaveChangesAsync();
@@ -30,6 +31,6 @@ public class UpdateProductHandler(Context context) : IUpdateProductHandler
     {
         if (request.Id == Guid.Empty) throw new ValidationException("ProductId should be valid.");
         if (string.IsNullOrWhiteSpace(request.Name)) throw new ValidationException("Name cannot be empty.");
-        if (request.Price <= 0) throw new ValidationException("Price must be greater than zero.");
+        if (request.Price < 0) throw new ValidationException("Price must be greater than or equal to zero.");
     }
 }

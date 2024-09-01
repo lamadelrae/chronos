@@ -14,8 +14,8 @@ public class SaleController(
     [HttpPost]
     public async Task<IActionResult> Save([FromBody] ISaveSaleHandler.Request request)
     {
-        await saveSaleHandler.Handle(request);
-        return Created();
+        var response = await saveSaleHandler.Handle(request);
+        return Created("created", response);
     }
 
     [HttpDelete("{id}")]

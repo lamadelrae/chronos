@@ -21,11 +21,13 @@ public class SaveUserHandler(Context context) : ISaveUserHandler
 
         var user = new Entities.User
         {
+            Id = Guid.NewGuid(),
             CompanyId = request.CompanyId,
             Name = request.Name,
             Email = request.Email,
             Password = request.Password.ToSha256(),
             CreatedAt = DateTime.UtcNow,
+            LastUpdate = DateTime.UtcNow
         };
 
         await _context.Set<Entities.User>().AddAsync(user);
