@@ -60,19 +60,8 @@ public class SaleSyncHandler(
 
         return (await etradeContext.Database.SqlQueryRaw<Sale.DataRecord>(sql, new SqlParameter("lastSync", lastSync)).ToListAsync())
             .GroupBy(item => new { item.SaleId, item.SaleDate, item.SaleTotal })
-            .Select(group => new Sale
-            {
-                Id = group.Key.SaleId,
-                Date = group.Key.SaleDate,
-                Total = group.Key.SaleTotal,
-                Items = group.Select(record => new Sale.Item
-                {
-                    ProductId = record.SaleItemProductId,
-                    Quantity = record.SaleItemQuantity,
-                    Price = record.SaleItemPrice,
-                    Total = record.SaleItemTotal
-                }).ToList()
-            }).ToList();
+            .Select(group => new Sale(group.Key.SaleId, group.Key.SaleDate, group.Key.SaleTotal, group.Select(record => new Sale.Item(record.SaleItemProductId, record.SaleItemQuantity, record.SaleItemPrice, record.SaleItemTotal)).ToList()))
+            .ToList();
     }
 
     private async Task<Dictionary<Guid, Guid>> GetAllSyncedProducts()
