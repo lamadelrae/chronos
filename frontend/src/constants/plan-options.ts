@@ -6,8 +6,8 @@ interface PlanFrequency {
 
 export const PLAN_OPTIONS = {
   frequencies: [
-    { value: 'monthly', label: 'Anual', priceSuffix: '/mês' },
-    { value: 'annually', label: 'Mensal', priceSuffix: '/ano' },
+    { value: 'annually', label: 'Anual', priceSuffix: '/ano' },
+    { value: 'monthly', label: 'Mensal', priceSuffix: '/mês' },
   ] as PlanFrequency[],
   tiers: [
     {
@@ -18,7 +18,7 @@ export const PLAN_OPTIONS = {
         annually: 399000,
       },
       description:
-        'Ideal para pequenas empresas que estão começando a otimizar seu estoque.',
+        'Ideal para pequenas empresas e médias que estão começando a otimizar e melhorar seu estoque.',
       features: [
         'Até 1.000 produtos',
         'Previsão de demanda básica',
