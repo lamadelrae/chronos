@@ -4,8 +4,20 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 20 14.3% 4.1%;
+    /* Style guide on figma */
+    
+    /* Main */
+    --foreground: 0 0% 7%;
+    --background: 0 0% 97%;
+    
+    /* Muted */
+    --muted: 60 4.8% 95.9%;
+    --muted-foreground: 25 5.3% 44.7%;
+    
+    /* Accent */
+    --accent: 258 90% 66%;
+    --accent-foreground: 0 0% 100%;
+    
     --card: 0 0% 100%;
     --card-foreground: 20 14.3% 4.1%;
     --popover: 0 0% 100%;
@@ -14,10 +26,6 @@
     --primary-foreground: 60 9.1% 97.8%;
     --secondary: 60 4.8% 95.9%;
     --secondary-foreground: 24 9.8% 10%;
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
-    --accent: 60 4.8% 95.9%;
-    --accent-foreground: 24 9.8% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 60 9.1% 97.8%;
     --border: 20 5.9% 90%;
@@ -66,4 +74,14 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.15 !important;
+  font-weight: 700;
+  letter-spacing: -0.025em !important;
+}
+
+p, span, strong, b {
+  line-height: 1.6 !important;
 }
