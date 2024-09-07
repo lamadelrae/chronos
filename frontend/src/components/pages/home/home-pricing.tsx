@@ -75,7 +75,7 @@ export function HomePricing() {
               variant={tier.featured ? 'accent' : 'outline'}
               className="mt-8 w-full"
             >
-              <Link href="/auth/login" aria-describedby={tier.id}>
+              <Link href="/auth/sign-in" aria-describedby={tier.id}>
                 Comece agora
               </Link>
             </Button>
