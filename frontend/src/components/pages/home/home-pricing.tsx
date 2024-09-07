@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { BrandGradient } from '@/components/brand-gradient'
 import { Button } from '@/components/ui/button'
 import { PLAN_OPTIONS } from '@/constants/plan-options'
+import { formatCurrency } from '@/lib/formatters'
 import { cn } from '@/lib/utils'
 
 export function HomePricing() {
@@ -47,10 +48,7 @@ export function HomePricing() {
             </h3>
             <p className="mt-4 flex items-baseline gap-x-2">
               <span className="text-5xl font-bold tracking-tight text-foreground">
-                {(tier.price.monthly / 100).toLocaleString('pt-BR', {
-                  style: 'currency',
-                  currency: 'BRL',
-                })}
+                {formatCurrency(tier.price.monthly / 100)}
               </span>
               <span className="text-base text-muted-foreground/50">/mês</span>
             </p>
