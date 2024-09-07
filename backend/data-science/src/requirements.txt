@@ -1,0 +1,9 @@
+pandas 
+numpy 
+scikit-learn 
+joblib 
+flask 
+flask-jsonpify 
+flask-restful 
+matplotlib 
+seaborn

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chronos.Api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240814222024_Initial")]
+    [Migration("20240831174916_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -133,8 +133,8 @@ namespace Chronos.Api.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("SaleId")
                         .HasColumnType("uniqueidentifier");

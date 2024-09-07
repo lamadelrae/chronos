@@ -22,7 +22,9 @@ public class SaveProductHandler(Context context) : ISaveProductHandler
             Id = Guid.NewGuid(),
             CompanyId = request.CompanyId,
             Name = request.Name,
-            Price = request.Price
+            Price = request.Price,
+            CreatedAt = DateTime.Now,
+            LastUpdate = DateTime.Now
         };
 
         await context.Set<Entities.Product>().AddAsync(product);
@@ -35,6 +37,6 @@ public class SaveProductHandler(Context context) : ISaveProductHandler
     {
         if (request.CompanyId == Guid.Empty) throw new ValidationException("CompanyId cannot be empty.");
         if (string.IsNullOrWhiteSpace(request.Name)) throw new ValidationException("Name cannot be empty.");
-        if (request.Price <= 0) throw new ValidationException("Price must be greater than zero.");
+        if (request.Price < 0) throw new ValidationException("Price must be greater than or equal than zero.");
     }
 }

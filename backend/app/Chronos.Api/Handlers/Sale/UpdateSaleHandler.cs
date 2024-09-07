@@ -8,9 +8,10 @@ public interface IUpdateSaleHandler
 {
     Task Handle(Request request);
 
-    public record Request(Guid SaleId, DateTime Date, decimal Total, List<SaleItemDto> Items);
-
-    public record SaleItemDto(Guid SaleItemId, Guid ProductId, int Quantity, decimal Price, decimal Total);
+    public record Request(Guid Id, DateTime Date, decimal Total, List<Request.SaleItem> Items)
+    {
+        public record SaleItem(Guid ProductId, decimal Quantity, decimal Price, decimal Total);
+    };
 }
 
 public class UpdateSaleHandler(Context context) : IUpdateSaleHandler
@@ -21,20 +22,23 @@ public class UpdateSaleHandler(Context context) : IUpdateSaleHandler
 
         var sale = await context.Set<Entities.Sale>()
             .Include(s => s.Items)
-            .FirstOrDefaultAsync(s => s.Id == request.SaleId)
+            .FirstOrDefaultAsync(s => s.Id == request.Id)
             ?? throw new ValidationException("Sale not found");
 
         sale.Date = request.Date;
         sale.Total = request.Total;
+        sale.LastUpdate = DateTime.Now;
         sale.Items = request.Items
             .Select(item => new Entities.SaleItem
             {
                 Id = Guid.NewGuid(),
+                CreatedAt = DateTime.Now,
+                LastUpdate = DateTime.Now,
                 ProductId = item.ProductId,
                 Quantity = item.Quantity,
                 Price = item.Price,
                 Total = item.Total,
-                SaleId = sale.Id
+                SaleId = request.Id
             }).ToList();
 
 
@@ -44,8 +48,8 @@ public class UpdateSaleHandler(Context context) : IUpdateSaleHandler
 
     private static void Validate(IUpdateSaleHandler.Request request)
     {
-        if (request.SaleId == Guid.Empty) throw new ValidationException("SaleId should be valid.");
+        if (request.Id == Guid.Empty) throw new ValidationException("SaleId should be valid.");
         if (request.Items == null || !request.Items.Any()) throw new ValidationException("Sale must contain at least one item.");
-        if (request.Total <= 0) throw new ValidationException("Total must be greater than zero.");
+        if (request.Total < 0) throw new ValidationException("Total must be greater than or equal to zero.");
     }
 }

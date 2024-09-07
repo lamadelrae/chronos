@@ -23,6 +23,8 @@ public class SaveCompanyHandler(Context context) : ISaveCompanyHandler
         var company = new Entities.Company
         {
             Id = Guid.NewGuid(),
+            CreatedAt = DateTime.Now,
+            LastUpdate = DateTime.Now,
             Name = request.CompanyName,
             SocialReason = request.SocialReason,
             Cnpj = request.Cnpj,

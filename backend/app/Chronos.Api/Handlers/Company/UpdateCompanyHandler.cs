@@ -25,6 +25,7 @@ public class UpdateCompanyHandler(Context context) : IUpdateCompanyHandler
         company.Name = request.CompanyName;
         company.SocialReason = request.SocialReason;
         company.Cnpj = request.Cnpj;
+        company.LastUpdate = DateTime.Now;
 
         company.Address = new Entities.Company.CompanyAddress
         {

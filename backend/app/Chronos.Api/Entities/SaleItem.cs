@@ -6,7 +6,7 @@ public class SaleItem : Entity
 {
     public Guid SaleId { get; set; }
     public Guid ProductId { get; set; }
-    public int Quantity { get; set; }
+    public decimal Quantity { get; set; }
     public decimal Price { get; set; }
     public decimal Total { get; set; }
 
