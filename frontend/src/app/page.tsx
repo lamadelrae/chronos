@@ -1,16 +1,27 @@
-import { Eye } from 'lucide-react'
-import Link from 'next/link'
-
-import { Button } from '@/components/ui/button'
+import { MarketingFooter } from '@/components/marketing/navigation/footer'
+import { MarketingHeader } from '@/components/marketing/navigation/header'
+import { HomeCTA } from '@/components/pages/home/home-cta'
+import { HomeFeatures } from '@/components/pages/home/home-features'
+import { HomeFeaturesAlt } from '@/components/pages/home/home-features-alt'
+import { HomeHero } from '@/components/pages/home/home-hero'
+import { HomePricing } from '@/components/pages/home/home-pricing'
+import { HomeTrust } from '@/components/pages/home/home-trust'
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <Button asChild size="sm">
-        <Link href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
-          <Eye className="mr-2 size-4" /> Chronos
-        </Link>
-      </Button>
-    </main>
+    <>
+      <MarketingHeader />
+      <main>
+        <div className="overflow-hidden">
+          <HomeHero />
+          <HomeFeatures />
+          <HomeTrust />
+          <HomeFeaturesAlt />
+          <HomePricing />
+          <HomeCTA />
+        </div>
+      </main>
+      <MarketingFooter />
+    </>
   )
 }
