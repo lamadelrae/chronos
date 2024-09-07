@@ -5,7 +5,7 @@ interface MarketingNavigation {
 
 export const MARKETING_NAVIGATION: MarketingNavigation[] = [
   {
-    name: 'Preços',
+    name: 'Planos',
     path: '/pricing',
   },
   {

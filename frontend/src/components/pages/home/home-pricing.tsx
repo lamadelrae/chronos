@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { BrandGradient } from '@/components/brand-gradient'
 import { Button } from '@/components/ui/button'
 import { PLAN_OPTIONS } from '@/constants/plan-options'
+import { formatCurrency } from '@/lib/formatters'
 import { cn } from '@/lib/utils'
 
 export function HomePricing() {
@@ -24,7 +25,7 @@ export function HomePricing() {
         ideal para otimizar seu estoque.
       </p>
       <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-2">
-        {PLAN_OPTIONS.map((tier, tierIdx) => (
+        {PLAN_OPTIONS.tiers.map((tier, tierIdx) => (
           <div
             key={tier.id}
             className={cn(
@@ -47,10 +48,7 @@ export function HomePricing() {
             </h3>
             <p className="mt-4 flex items-baseline gap-x-2">
               <span className="text-5xl font-bold tracking-tight text-foreground">
-                {(tier.pricing.monthly / 100).toLocaleString('pt-BR', {
-                  style: 'currency',
-                  currency: 'BRL',
-                })}
+                {formatCurrency(tier.price.monthly / 100)}
               </span>
               <span className="text-base text-muted-foreground/50">/mês</span>
             </p>
@@ -77,7 +75,7 @@ export function HomePricing() {
               variant={tier.featured ? 'accent' : 'outline'}
               className="mt-8 w-full"
             >
-              <Link href="/auth/login" aria-describedby={tier.id}>
+              <Link href="/auth/sign-in" aria-describedby={tier.id}>
                 Comece agora
               </Link>
             </Button>
