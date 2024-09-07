@@ -1,8 +1,10 @@
 ﻿using Chronos.Api.Handlers.Product;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chronos.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/product")]
 public class ProductController(

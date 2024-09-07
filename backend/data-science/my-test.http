@@ -1,0 +1,341 @@
+POST http://127.0.0.1:5000/prediction
+content-type: application/json
+
+[
+  {
+    "productId": "IDproduto_1",
+    "name": "produto_1",
+    "years": [
+      {
+        "year": 2022,
+        "quantity": 299,
+        "months": [
+          {
+            "month": 1,
+            "quantity": 48
+          },
+          {
+            "month": 2,
+            "quantity": 20
+          },
+          {
+            "month": 3,
+            "quantity": 3
+          },
+          {
+            "month": 4,
+            "quantity": 5
+          },
+          {
+            "month": 5,
+            "quantity": 37
+          },
+          {
+            "month": 6,
+            "quantity": 28
+          },
+          {
+            "month": 7,
+            "quantity": 9
+          },
+          {
+            "month": 8,
+            "quantity": 38
+          },
+          {
+            "month": 9,
+            "quantity": 30
+          },
+          {
+            "month": 10,
+            "quantity": 41
+          },
+          {
+            "month": 11,
+            "quantity": 39
+          },
+          {
+            "month": 12,
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "year": 2023,
+        "quantity": 354,
+        "months": [
+          {
+            "month": 1,
+            "quantity": 35
+          },
+          {
+            "month": 2,
+            "quantity": 45
+          },
+          {
+            "month": 3,
+            "quantity": 37
+          },
+          {
+            "month": 4,
+            "quantity": 49
+          },
+          {
+            "month": 5,
+            "quantity": 0
+          },
+          {
+            "month": 6,
+            "quantity": 27
+          },
+          {
+            "month": 7,
+            "quantity": 3
+          },
+          {
+            "month": 8,
+            "quantity": 17
+          },
+          {
+            "month": 9,
+            "quantity": 47
+          },
+          {
+            "month": 10,
+            "quantity": 45
+          },
+          {
+            "month": 11,
+            "quantity": 8
+          },
+          {
+            "month": 12,
+            "quantity": 41
+          }
+        ]
+      },
+      {
+        "year": 2024,
+        "quantity": 302,
+        "months": [
+          {
+            "month": 1,
+            "quantity": 46
+          },
+          {
+            "month": 2,
+            "quantity": 2
+          },
+          {
+            "month": 3,
+            "quantity": 34
+          },
+          {
+            "month": 4,
+            "quantity": 39
+          },
+          {
+            "month": 5,
+            "quantity": 5
+          },
+          {
+            "month": 6,
+            "quantity": 14
+          },
+          {
+            "month": 7,
+            "quantity": 46
+          },
+          {
+            "month": 8,
+            "quantity": 36
+          },
+          {
+            "month": 9,
+            "quantity": 6
+          },
+          {
+            "month": 10,
+            "quantity": 22
+          },
+          {
+            "month": 11,
+            "quantity": 36
+          },
+          {
+            "month": 12,
+            "quantity": 16
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "productId": "IDproduto_2",
+    "name": "produto_2",
+    "years": [
+      {
+        "year": 2022,
+        "quantity": 332,
+        "months": [
+          {
+            "month": 1,
+            "quantity": 9
+          },
+          {
+            "month": 2,
+            "quantity": 29
+          },
+          {
+            "month": 3,
+            "quantity": 32
+          },
+          {
+            "month": 4,
+            "quantity": 20
+          },
+          {
+            "month": 5,
+            "quantity": 31
+          },
+          {
+            "month": 6,
+            "quantity": 4
+          },
+          {
+            "month": 7,
+            "quantity": 43
+          },
+          {
+            "month": 8,
+            "quantity": 6
+          },
+          {
+            "month": 9,
+            "quantity": 28
+          },
+          {
+            "month": 10,
+            "quantity": 37
+          },
+          {
+            "month": 11,
+            "quantity": 49
+          },
+          {
+            "month": 12,
+            "quantity": 44
+          }
+        ]
+      },
+      {
+        "year": 2023,
+        "quantity": 262,
+        "months": [
+          {
+            "month": 1,
+            "quantity": 45
+          },
+          {
+            "month": 2,
+            "quantity": 5
+          },
+          {
+            "month": 3,
+            "quantity": 9
+          },
+          {
+            "month": 4,
+            "quantity": 48
+          },
+          {
+            "month": 5,
+            "quantity": 44
+          },
+          {
+            "month": 6,
+            "quantity": 7
+          },
+          {
+            "month": 7,
+            "quantity": 13
+          },
+          {
+            "month": 8,
+            "quantity": 27
+          },
+          {
+            "month": 9,
+            "quantity": 19
+          },
+          {
+            "month": 10,
+            "quantity": 20
+          },
+          {
+            "month": 11,
+            "quantity": 24
+          },
+          {
+            "month": 12,
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "year": 2024,
+        "quantity": 263,
+        "months": [
+          {
+            "month": 1,
+            "quantity": 19
+          },
+          {
+            "month": 2,
+            "quantity": 26
+          },
+          {
+            "month": 3,
+            "quantity": 34
+          },
+          {
+            "month": 4,
+            "quantity": 3
+          },
+          {
+            "month": 5,
+            "quantity": 7
+          },
+          {
+            "month": 6,
+            "quantity": 23
+          },
+          {
+            "month": 7,
+            "quantity": 11
+          },
+          {
+            "month": 8,
+            "quantity": 27
+          },
+          {
+            "month": 9,
+            "quantity": 43
+          },
+          {
+            "month": 10,
+            "quantity": 22
+          },
+          {
+            "month": 11,
+            "quantity": 4
+          },
+          {
+            "month": 12,
+            "quantity": 44
+          }
+        ]
+      }
+    ]
+  }
+]
