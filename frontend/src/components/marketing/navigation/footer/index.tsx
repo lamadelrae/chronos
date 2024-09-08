@@ -34,10 +34,13 @@ export function MarketingFooter() {
               />
             </Link>
 
-            <Typography className="mt-6 text-lg text-foreground font-semibold flex items-center">
-              Feito com ❤️ por
+            <div className="flex items-center mt-6">
+              <Typography className="text-lg text-foreground font-semibold">
+                Feito com ❤️ por
+              </Typography>
+
               <AvatarCircles className="ml-4" avatarUrls={avatarUrls} />
-            </Typography>
+            </div>
 
             <Typography className="mt-4 text-xs">
               Chronos é um software inteligente de predição de estoque e demanda
