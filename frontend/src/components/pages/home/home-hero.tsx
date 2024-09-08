@@ -2,6 +2,7 @@ import Image from 'next/image'
 
 import { BrandGradient } from '@/components/brand-gradient'
 import { Button } from '@/components/ui/button'
+import { Typography } from '@/components/ui/typography'
 
 export function HomeHero() {
   return (
@@ -11,16 +12,16 @@ export function HomeHero() {
       <div className="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
         <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
           <div className="relative w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
-            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
+            <Typography variant="h1">
               Transforme sua gestão de estoque hoje
-            </h1>
-            <p className="mt-6 text-lg text-muted-foreground sm:max-w-md lg:max-w-none">
+            </Typography>
+            <Typography className="mt-6 text-lg sm:max-w-md lg:max-w-none">
               O Chronos utiliza inteligência artificial para prever demandas e
               otimizar o controle de estoque em sua loja de varejo. Reduza
               perdas, aumente seus lucros e tome decisões estratégicas com
               facilidade. Descubra uma maneira mais inteligente de gerenciar seu
               negócio.
-            </p>
+            </Typography>
             <div className="mt-10 flex items-center gap-4 flex-col sm:flex-row w-full sm:w-fit">
               <Button variant="accent" className="w-full">
                 Experimente agora

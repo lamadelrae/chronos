@@ -1,6 +1,8 @@
+import { Typography } from '@/components/ui/typography'
+
 const stats = [
-  { id: 1, name: 'Processamento de dados históricos', value: '1M+/s' },
-  { id: 2, name: 'Tempo médio de processamento', value: '< 50ms' },
+  { id: 1, name: 'Processamento de dados', value: '1M+/s' },
+  { id: 2, name: 'Tempo médio de processamento', value: '24h' },
   { id: 3, name: 'Precisão de análise', value: '+90%' },
   { id: 4, name: 'Dados processados', value: '10GB+' },
 ]
@@ -11,22 +13,22 @@ export function HomeTrust() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:max-w-none">
           <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <Typography variant="h2">
               Processamento de dados históricos poderoso e eficiente
-            </h2>
-            <p className="mt-4 text-lg leading-8 text-gray-600">
+            </Typography>
+            <Typography className="mt-6">
               O Chronos oferece capacidade incomparável de processamento
               automático e rápido de grandes volumes de dados históricos.
-            </p>
+            </Typography>
           </div>
           <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => (
-              <div key={stat.id} className="flex flex-col bg-gray-400/5 p-8">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">
-                  {stat.name}
+              <div key={stat.id} className="flex flex-col bg-foreground/5 p-8">
+                <dt>
+                  <Typography variant="small">{stat.name}</Typography>
                 </dt>
-                <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900">
-                  {stat.value}
+                <dd className="order-first">
+                  <Typography variant="h3">{stat.value}</Typography>
                 </dd>
               </div>
             ))}

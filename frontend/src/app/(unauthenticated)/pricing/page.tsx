@@ -4,8 +4,10 @@ import { CheckIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 
+import { BrandGradient } from '@/components/brand-gradient'
 import { Button } from '@/components/ui/button'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { Typography } from '@/components/ui/typography'
 import { PLAN_OPTIONS } from '@/constants/plan-options'
 import { formatCurrency } from '@/lib/formatters'
 import { cn } from '@/lib/utils'
@@ -68,19 +70,20 @@ export default function PricingPage() {
 
   return (
     <>
-      <div className="mx-auto mt-16 max-w-7xl px-6 sm:mt-32 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
+        <BrandGradient />
+
         <div className="mx-auto max-w-4xl text-center">
-          <h1 className="text-base font-semibold leading-7 text-accent">
-            Planos
-          </h1>
-          <p className="mt-2 text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+          <Typography variant="h1" className="mt-2">
             Preço simples, sem compromisso.
-          </p>
+          </Typography>
         </div>
-        <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-muted-foreground">
+
+        <Typography className="mt-6 max-w-2xl mx-auto text-center">
           Escolha um plano acessível repleto dos melhores recursos para otimizar
           seu estoque, aumentar a eficiência e impulsionar suas vendas.
-        </p>
+        </Typography>
+
         <div className="mt-16 flex justify-center">
           <fieldset aria-label="Frequência de pagamento">
             <ToggleGroup
@@ -115,35 +118,40 @@ export default function PricingPage() {
               )}
             >
               <div className="flex items-center justify-between gap-x-4 relative">
-                <h3
+                <Typography
                   id={tier.id}
+                  variant="h6"
                   className={cn(
                     tier.mostPopular ? 'text-accent' : 'text-foreground',
                     'text-base font-semibold leading-7',
                   )}
                 >
                   {tier.name}
-                </h3>
+                </Typography>
                 {tier.mostPopular ? (
-                  <p className="rounded-full bg-accent px-2.5 py-1 text-xs font-semibold leading-5 text-accent-foreground absolute -top-0.5 right-0">
+                  <Typography className="rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground absolute -top-0.5 right-0">
                     Mais popular
-                  </p>
+                  </Typography>
                 ) : null}
               </div>
-              <p className="mt-6 text-base leading-7 text-muted-foreground">
-                {tier.description}
-              </p>
-              <p className="mt-6 flex items-baseline gap-x-1">
-                <span className="text-4xl font-bold tracking-tight text-foreground">
+
+              <Typography className="mt-6">{tier.description}</Typography>
+
+              <div className="mt-6 flex items-baseline gap-x-1">
+                <Typography variant="h2">
                   {formatCurrency(tier.price[frequency.value] / 100)}
-                </span>
-                <span className="text-base text-muted-foreground/50">
+                </Typography>
+                <Typography className="text-muted-foreground/50">
                   {frequency.priceSuffix}
-                </span>
-              </p>
+                </Typography>
+              </div>
+
               {frequency.value === 'annually' ? (
-                <p className="text-accent text-sm -mt-2">2 meses grátis</p>
+                <Typography className="text-accent text-sm">
+                  2 meses grátis
+                </Typography>
               ) : null}
+
               <Button
                 asChild
                 variant={tier.mostPopular ? 'accent' : 'outline'}
@@ -153,17 +161,17 @@ export default function PricingPage() {
                   Começar agora
                 </Link>
               </Button>
-              <ul
-                role="list"
-                className="mt-8 space-y-3 text-sm leading-6 text-foreground sm:mt-10"
-              >
+
+              <ul role="list" className="mt-8 space-y-3 sm:mt-10">
                 {tier.features.map((feature) => (
                   <li key={feature} className="flex gap-x-3">
                     <CheckIcon
                       aria-hidden="true"
                       className="h-6 w-5 flex-none text-accent"
                     />
-                    {feature}
+                    <Typography variant="small" className="text-foreground">
+                      {feature}
+                    </Typography>
                   </li>
                 ))}
               </ul>
@@ -172,12 +180,10 @@ export default function PricingPage() {
         </div>
       </div>
 
-      <div className="bg-white px-6 sm:mt-56 lg:px-8 mt-24 py-20">
+      <div className="bg-white px-6 lg:px-8 mt-24 py-20">
         <div className="mx-auto max-w-7xl">
-          <h2 className="text-2xl font-bold leading-10 tracking-tight text-foreground">
-            Perguntas frequentes
-          </h2>
-          <p className="mt-6 max-w-2xl text-base leading-7 text-muted-foreground">
+          <Typography variant="h2">Perguntas frequentes</Typography>
+          <Typography className="mt-6 max-w-2xl">
             Tem uma pergunta diferente e não encontra a resposta que procura?
             Entre em contato com nossa equipe de suporte{' '}
             <Link
@@ -187,16 +193,18 @@ export default function PricingPage() {
               enviando-nos um e-mail
             </Link>{' '}
             e responderemos o mais rápido possível.
-          </p>
+          </Typography>
           <div className="mt-20">
             <dl className="space-y-16 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-16 sm:space-y-0 lg:grid-cols-3 lg:gap-x-10">
               {faqs.map((faq) => (
                 <div key={faq.id}>
-                  <dt className="text-base font-semibold leading-7 text-foreground">
-                    {faq.question}
+                  <dt>
+                    <Typography className="font-semibold text-foreground">
+                      {faq.question}
+                    </Typography>
                   </dt>
-                  <dd className="mt-2 text-base leading-7 text-muted-foreground">
-                    {faq.answer}
+                  <dd>
+                    <Typography className="mt-2">{faq.answer}</Typography>
                   </dd>
                 </div>
               ))}
