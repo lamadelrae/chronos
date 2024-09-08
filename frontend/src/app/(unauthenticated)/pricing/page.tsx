@@ -74,9 +74,7 @@ export default function PricingPage() {
         <BrandGradient />
 
         <div className="mx-auto max-w-4xl text-center">
-          <Typography variant="h1" className="mt-2">
-            Preço simples, sem compromisso.
-          </Typography>
+          <Typography variant="h1">Preço simples, sem compromisso.</Typography>
         </div>
 
         <Typography className="mt-6 max-w-2xl mx-auto text-center">
