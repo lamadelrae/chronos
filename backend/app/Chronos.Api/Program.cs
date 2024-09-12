@@ -8,6 +8,7 @@ using Chronos.Api.Handlers.User;
 using Chronos.Api.Jobs;
 using Chronos.Api.Services;
 using Chronos.Api.Shared.Extensions;
+using Chronos.Api.Shared.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -65,6 +66,9 @@ builder.Services.AddHttpClient("Prediction", options =>
 });
 
 builder.Services.AddScoped<IAuthHandler, AuthHandler>();
+builder.Services.AddScoped<IUserInfo, UserInfo>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 builder.Services
     .AddScoped<ISaveProductHandler, SaveProductHandler>()
     .AddScoped<IUpdateProductHandler, UpdateProductHandler>()
@@ -76,15 +80,13 @@ builder.Services
 
 builder.Services
     .AddScoped<ISaveUserHandler, SaveUserHandler>()
-    .AddScoped<IFetchUsersHandler, FetchUsersHandler>()
-    .AddScoped<IUpdateUserHandler, UpdateUserHandler>()
-    .AddScoped<IDeleteUserHandler, DeleteUserHandler>();
+    .AddScoped<IFetchCurrentUserHandler, FetchCurrentUserHandler>()
+    .AddScoped<IUpdateUserHandler, UpdateUserHandler>();
 
 builder.Services
     .AddScoped<ISaveCompanyHandler, SaveCompanyHandler>()
-    .AddScoped<IFetchCompaniesHandler, FetchCompaniesHandler>()
-    .AddScoped<IUpdateCompanyHandler, UpdateCompanyHandler>()
-    .AddScoped<IDeleteCompanyHandler, DeleteCompanyHandler>();
+    .AddScoped<IFetchCurrentCompanyHandler, FetchCurrentCompanyHandler>()
+    .AddScoped<IUpdateCompanyHandler, UpdateCompanyHandler>();
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 builder.Services.AddTransient<IPredictionHttpService, PredictionHttpService>();

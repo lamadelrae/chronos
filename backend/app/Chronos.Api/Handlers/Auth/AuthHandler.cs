@@ -36,9 +36,10 @@ public class AuthHandler(Context context, IConfiguration configuration) : IAuthH
         {
             Subject = new ClaimsIdentity(
                 [
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.Name)
+                    new Claim("companyId", user.CompanyId.ToString()),
+                    new Claim("id", user.Id.ToString()),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Name, user.Name)
                 ]),
             Expires = DateTime.UtcNow.AddHours(6),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
