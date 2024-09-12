@@ -1,13 +1,14 @@
-from services.ClusterService import cluster_products
-from services.PredictionByClusterService import train_model_by_cluster, predict_by_cluster
-from sklearn.model_selection import train_test_split
+from flask import Blueprint, jsonify, request
+from handlers.PredictionHandler import predict
 
-def generate_predictions(sales_data):
-    clustered_data_frame = cluster_products(sales_data)
+bp = Blueprint('routes', __name__)
 
-    clusters = clustered_data_frame['cluster'].unique()
-    for cluster in clusters:
-        model = train_model_by_cluster(clustered_data_frame[clustered_data_frame['cluster'] == cluster])
-        cluster_predictions = predict_by_cluster(clustered_data_frame[clustered_data_frame['cluster'] == cluster], model)
-
-    return True
+# Prediction
+@bp.route('/prediction', methods=['POST'])
+def get_predictions():
+    data = request.get_json()
+    if data:
+        predictions = predict(data)
+        return jsonify(predictions), 200
+    else:
+        return jsonify({"error": "No JSON received"}), 400
