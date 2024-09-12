@@ -27,10 +27,10 @@ public class PredictionJob(Context dbContext, IPredictionHttpService predictionS
 
     private async Task ProcessCompany(Guid companyId)
     {
+        await DeleteOldPredictions(companyId);
+        
         var stats = await GetProductStats(companyId);
-
         var groups = stats.GroupBy(stat => new { stat.Id, stat.Name });
-        await DeleteOldPredictions(groups.Select(group => group.Key.Id));
 
         foreach (var group in groups)
         {
@@ -64,9 +64,9 @@ public class PredictionJob(Context dbContext, IPredictionHttpService predictionS
         }
     }
 
-    private async Task DeleteOldPredictions(IEnumerable<Guid> products)
+    private async Task DeleteOldPredictions(Guid companyId)
     {
-        var predictions = await dbContext.Set<Prediction>().Where(p => products.Contains(p.ProductId)).ToListAsync();
+        var predictions = await dbContext.Set<Prediction>().Where(p => p.Product.CompanyId == companyId).ToListAsync();
         dbContext.Set<Prediction>().RemoveRange(predictions);
         await dbContext.SaveChangesAsync();
     }
