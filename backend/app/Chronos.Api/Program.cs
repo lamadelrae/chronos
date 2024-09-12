@@ -41,14 +41,11 @@ builder.Services.AddScoped<IAuthHandler, AuthHandler>();
 builder.Services
     .AddScoped<ISaveProductHandler, SaveProductHandler>()
     .AddScoped<IUpdateProductHandler, UpdateProductHandler>()
-    .AddScoped<IDeleteProductHandler, DeleteProductHandler>()
     .AddScoped<IFetchProductsHandler, FetchProductsHandler>();
 
 builder.Services
     .AddScoped<ISaveSaleHandler, SaveSaleHandler>()
-    .AddScoped<IFetchSalesHandler, FetchSalesHandler>()
-    .AddScoped<IUpdateSaleHandler, UpdateSaleHandler>()
-    .AddScoped<IDeleteSaleHandler, DeleteSaleHandler>();
+    .AddScoped<IFetchSalesHandler, FetchSalesHandler>();
 
 builder.Services
     .AddScoped<ISaveUserHandler, SaveUserHandler>()
