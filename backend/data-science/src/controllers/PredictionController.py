@@ -3,7 +3,6 @@ from handlers.PredictionHandler import predict
 
 bp = Blueprint('routes', __name__)
 
-# Prediction
 @bp.route('/prediction', methods=['POST'])
 def get_predictions():
     data = request.get_json()

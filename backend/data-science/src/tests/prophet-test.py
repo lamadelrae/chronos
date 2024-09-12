@@ -2,7 +2,6 @@ import numpy as np
 np.float_ = np.float64
 from prophet import Prophet
 import pandas as pd
-from prophet import Prophet
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 

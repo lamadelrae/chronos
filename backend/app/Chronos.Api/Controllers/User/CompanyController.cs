@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Chronos.Api.Controllers;
+namespace Chronos.Api.Controllers.User;
 
 [ApiController]
-[Route("api/company")]
+[Route("api/user/company")]
 public class CompanyController(
     ISaveCompanyHandler saveCompanyHandler,
     IUpdateCompanyHandler updateCompanyHandler,
@@ -25,15 +25,15 @@ public class CompanyController(
     {
         var request = new IDeleteCompanyHandler.Request(id);
         await deleteCompanyHandler.Handle(request);
-        return (Ok());
+        return Ok();
     }
 
     [Authorize]
     [HttpGet]
     public async Task<IActionResult> FetchCompany(
-        [FromQuery] int page, 
-        [FromQuery] int size, 
-        [FromQuery] Guid? id, 
+        [FromQuery] int page,
+        [FromQuery] int size,
+        [FromQuery] Guid? id,
         [FromQuery] string? cnpj)
     {
         var request = new IFetchCompaniesHandler.Request(page, size, id, cnpj);

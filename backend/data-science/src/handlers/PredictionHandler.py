@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+np.float_ = np.float64
 from prophet import Prophet
 
 def predict(json):
