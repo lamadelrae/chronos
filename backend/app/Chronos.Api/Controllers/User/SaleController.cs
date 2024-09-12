@@ -11,7 +11,7 @@ public class SaleController(IFetchSalesHandler fetchSalesHandler) : ControllerBa
 {
 
     [HttpGet]
-    public async Task<IActionResult> FetchAll([FromQuery] int page, [FromQuery] int size)
+    public async Task<IActionResult> Fetch([FromQuery] int page, [FromQuery] int size)
     {
         var request = new IFetchSalesHandler.Request(page, size);
         var response = await fetchSalesHandler.Handle(request);

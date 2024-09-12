@@ -8,8 +8,7 @@ namespace Chronos.Api.Controllers.User;
 [Route("api/user")]
 public class UserController(
     ISaveUserHandler saveUserHandler,
-    IDeleteUserHandler deleteUserHandler,
-    IFetchUsersHandler fetchUsersHandler,
+    IFetchCurrentUserHandler fetchCurrentUserHandler,
     IUpdateUserHandler updateUserHandler) : ControllerBase
 {
     [HttpPost]
@@ -20,20 +19,10 @@ public class UserController(
     }
 
     [Authorize]
-    [HttpDelete("{userId}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid userId)
-    {
-        var request = new IDeleteUserHandler.Request(userId);
-        await deleteUserHandler.Handle(request);
-        return Ok();
-    }
-
-    [Authorize]
     [HttpGet]
-    public async Task<IActionResult> FetchUser([FromQuery] int page, [FromQuery] int size, [FromQuery] Guid? id)
+    public async Task<IActionResult> FetchCurrent()
     {
-        var request = new IFetchUsersHandler.Request(page, size, id);
-        var response = await fetchUsersHandler.Handle(request);
+        var response = await fetchCurrentUserHandler.Handle();
         return Ok(response);
     }
 

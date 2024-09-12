@@ -1,4 +1,6 @@
 ﻿using Chronos.Api.Data;
+using Chronos.Api.Shared.Users;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace Chronos.Api.Handlers.User;
@@ -10,7 +12,7 @@ public interface IUpdateUserHandler
     public record Request(Guid UserId, string Name, string Email);
 }
 
-public class UpdateUserHandler(Context context) : IUpdateUserHandler
+public class UpdateUserHandler(Context context, IUserInfo userInfo) : IUpdateUserHandler
 {
     private readonly Context _context = context;
 
@@ -18,7 +20,9 @@ public class UpdateUserHandler(Context context) : IUpdateUserHandler
     {
         Validate(request);
 
-        var user = await _context.Set<Entities.User>().FindAsync(request.UserId) ?? throw new ValidationException("User not found.");
+        var user = await _context.Set<Entities.User>().FirstOrDefaultAsync(user => user.Id == request.UserId && user.CompanyId == userInfo.CompanyId) 
+            ?? throw new ValidationException("User not found.");
+
         user.Name = request.Name;
         user.Email = request.Email;
         user.LastUpdate = DateTime.Now;

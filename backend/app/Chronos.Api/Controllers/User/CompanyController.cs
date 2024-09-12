@@ -9,8 +9,7 @@ namespace Chronos.Api.Controllers.User;
 public class CompanyController(
     ISaveCompanyHandler saveCompanyHandler,
     IUpdateCompanyHandler updateCompanyHandler,
-    IDeleteCompanyHandler deleteCompanyHandler,
-    IFetchCompaniesHandler fetchCompaniesHandler) : ControllerBase
+    IFetchCurrentCompanyHandler fetchCurrentCompanyHandler) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> Save([FromBody] ISaveCompanyHandler.Request request)
@@ -20,30 +19,16 @@ public class CompanyController(
     }
 
     [Authorize]
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCompany([FromRoute] Guid id)
-    {
-        var request = new IDeleteCompanyHandler.Request(id);
-        await deleteCompanyHandler.Handle(request);
-        return Ok();
-    }
-
-    [Authorize]
     [HttpGet]
-    public async Task<IActionResult> FetchCompany(
-        [FromQuery] int page,
-        [FromQuery] int size,
-        [FromQuery] Guid? id,
-        [FromQuery] string? cnpj)
+    public async Task<IActionResult> FetchCurrent()
     {
-        var request = new IFetchCompaniesHandler.Request(page, size, id, cnpj);
-        var response = await fetchCompaniesHandler.Handle(request);
+        var response = await fetchCurrentCompanyHandler.Handle();
         return Ok(response);
     }
 
     [Authorize]
     [HttpPut]
-    public async Task<IActionResult> UpdateCompany([FromBody] IUpdateCompanyHandler.Request request)
+    public async Task<IActionResult> Update([FromBody] IUpdateCompanyHandler.Request request)
     {
         await updateCompanyHandler.Handle(request);
         return Ok();

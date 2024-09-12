@@ -1,5 +1,6 @@
 ﻿using Chronos.Api.Data;
 using Chronos.Api.Shared.Responses;
+using Chronos.Api.Shared.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chronos.Api.Handlers.Product;
@@ -12,14 +13,14 @@ public interface IFetchProductsHandler
     public record Response(Guid Id, string Name, decimal Price);
 }
 
-public class FetchProductsHandler(Context context) : IFetchProductsHandler
+public class FetchProductsHandler(Context context, IUserInfo userInfo) : IFetchProductsHandler
 {
     public async Task<PaginatedResponse<IFetchProductsHandler.Response>> Handle(IFetchProductsHandler.Request request)
     {
         var products = await context.Set<Entities.Product>()
             .Skip(request.PageSize * request.Page)
             .Take(request.PageSize)
-            .Where(product => (request.Ids == null || request.Ids.Length == 0) || request.Ids.Contains(product.Id))
+            .Where(product => (request.Ids == null || request.Ids.Length == 0) || request.Ids.Contains(product.Id) && product.CompanyId == userInfo.CompanyId)
             .Select(x => new IFetchProductsHandler.Response(x.Id, x.Name, x.Price))
             .ToListAsync();
 
