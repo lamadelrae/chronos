@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Chronos.Api.Controllers.User;
 
 [ApiController]
-[Route("api/user/user")]
+[Route("api/user")]
 public class UserController(
     ISaveUserHandler saveUserHandler,
     IDeleteUserHandler deleteUserHandler,

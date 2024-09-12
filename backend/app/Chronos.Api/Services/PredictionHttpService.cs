@@ -7,14 +7,14 @@ public interface IPredictionHttpService
 {
     Task<Response?> Post(Request request);
 
-    public record Request(Guid ProductId, int Year, decimal Quantity, ICollection<Request.MonthRequest> Months)
+    public record Request(string Product, IEnumerable<Request.Sale> Sales)
     {
-        public record MonthRequest(int Month, decimal Quantity);
+        public record Sale(DateOnly Date, decimal Quantity);
     }
 
-    public record Response(Guid ProductId, int Year, decimal Quantity, ICollection<Request.MonthRequest> Months)
+    public record Response(string Product, IEnumerable<Response.Sale> Sales)
     {
-        public record MonthResponse(int Month, decimal Quantity);
+        public record Sale(DateOnly Date, decimal Quantity);
     }
 }
 
@@ -23,7 +23,7 @@ public class PredictionHttpService(IHttpClientFactory factory) : IPredictionHttp
     public async Task<IPredictionHttpService.Response?> Post(IPredictionHttpService.Request request)
     {
         var client = factory.CreateClient("Prediction");
-        var message = new HttpRequestMessage(HttpMethod.Post, "api/product")
+        var message = new HttpRequestMessage(HttpMethod.Post, "prediction")
         {
             Content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json")
         };
