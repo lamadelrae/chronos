@@ -1,7 +1,7 @@
 ﻿using Chronos.Api.Handlers.Auth;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Chronos.Api.Controllers;
+namespace Chronos.Api.Controllers.User;
 
 [ApiController]
 [Route("api/auth")]

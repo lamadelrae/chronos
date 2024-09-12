@@ -19,7 +19,7 @@ public class FetchProductsHandler(Context context) : IFetchProductsHandler
         var products = await context.Set<Entities.Product>()
             .Skip(request.PageSize * request.Page)
             .Take(request.PageSize)
-            .Where(product => request.Ids == null || request.Ids.Contains(product.Id))
+            .Where(product => (request.Ids == null || request.Ids.Length == 0) || request.Ids.Contains(product.Id))
             .Select(x => new IFetchProductsHandler.Response(x.Id, x.Name, x.Price))
             .ToListAsync();
 

@@ -10,6 +10,7 @@ public class Context(DbContextOptions options) : DbContext(options)
         builder.ApplyConfiguration(new UserMap());
         builder.ApplyConfiguration(new CompanyMap());
         builder.ApplyConfiguration(new ProductMap());
+        builder.ApplyConfiguration(new PredictionMap());
         builder.ApplyConfiguration(new SaleMap());
         builder.ApplyConfiguration(new SaleItemMap());
     }

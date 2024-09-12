@@ -5,10 +5,13 @@ using Chronos.Api.Handlers.Company;
 using Chronos.Api.Handlers.Product;
 using Chronos.Api.Handlers.Sale;
 using Chronos.Api.Handlers.User;
+using Chronos.Api.Jobs;
+using Chronos.Api.Services;
 using Chronos.Api.Shared.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,18 +40,39 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddQuartz(q =>
+{
+    var key = new JobKey("Job");
+
+    q.AddJob<PredictionJob>(j => j
+    .WithIdentity(key)
+    .Build());
+
+    q.AddTrigger(t => t.ForJob(key)
+    .WithIdentity("Job-trigger")
+    .WithSchedule(CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Sunday, 2, 0)));
+
+    q.AddTrigger(t => t.ForJob(key)
+    .WithIdentity("Job-now-trigger")
+    .StartNow());
+});
+
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
+builder.Services.AddHttpClient("Prediction", options =>
+{
+    options.BaseAddress = new Uri(builder.Configuration.GetValue<string?>("Prediction:ApiUrl") ?? string.Empty);
+});
+
 builder.Services.AddScoped<IAuthHandler, AuthHandler>();
 builder.Services
     .AddScoped<ISaveProductHandler, SaveProductHandler>()
     .AddScoped<IUpdateProductHandler, UpdateProductHandler>()
-    .AddScoped<IDeleteProductHandler, DeleteProductHandler>()
     .AddScoped<IFetchProductsHandler, FetchProductsHandler>();
 
 builder.Services
     .AddScoped<ISaveSaleHandler, SaveSaleHandler>()
-    .AddScoped<IFetchSalesHandler, FetchSalesHandler>()
-    .AddScoped<IUpdateSaleHandler, UpdateSaleHandler>()
-    .AddScoped<IDeleteSaleHandler, DeleteSaleHandler>();
+    .AddScoped<IFetchSalesHandler, FetchSalesHandler>();
 
 builder.Services
     .AddScoped<ISaveUserHandler, SaveUserHandler>()
@@ -63,6 +87,8 @@ builder.Services
     .AddScoped<IDeleteCompanyHandler, DeleteCompanyHandler>();
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+builder.Services.AddTransient<IPredictionHttpService, PredictionHttpService>();
+
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtOptionsProvider.GetProvider(builder.Configuration));

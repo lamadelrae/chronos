@@ -1,0 +1,146 @@
+# VSCode REST Client (https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
+
+POST http://127.0.0.1:5000/prediction
+content-type: application/json
+
+{
+    "product": "BANANA D AGUA KG",
+    "sales": [
+        {
+            "date": "2024-07-05",
+            "quantity": 1
+        },
+        {
+            "date": "2024-07-06",
+            "quantity": 25
+        },
+        {
+            "date": "2024-07-07",
+            "quantity": 13
+        },
+        {
+            "date": "2024-07-08",
+            "quantity": 40
+        },
+        {
+            "date": "2024-07-09",
+            "quantity": 27
+        },
+        {
+            "date": "2024-07-10",
+            "quantity": 98
+        },
+        {
+            "date": "2024-07-11",
+            "quantity": 42
+        },
+        {
+            "date": "2024-07-13",
+            "quantity": 29
+        },
+        {
+            "date": "2024-07-14",
+            "quantity": 10
+        },
+        {
+            "date": "2024-07-15",
+            "quantity": 18
+        },
+        {
+            "date": "2024-07-16",
+            "quantity": 18
+        },
+        {
+            "date": "2024-07-17",
+            "quantity": 65
+        },
+        {
+            "date": "2024-07-18",
+            "quantity": 75
+        },
+        {
+            "date": "2024-07-19",
+            "quantity": 33
+        },
+        {
+            "date": "2024-07-20",
+            "quantity": 45
+        },
+        {
+            "date": "2024-07-21",
+            "quantity": 22
+        },
+        {
+            "date": "2024-07-22",
+            "quantity": 24
+        },
+        {
+            "date": "2024-07-23",
+            "quantity": 11
+        },
+        {
+            "date": "2024-07-24",
+            "quantity": 114
+        },
+        {
+            "date": "2024-07-25",
+            "quantity": 63
+        },
+        {
+            "date": "2024-07-26",
+            "quantity": 21
+        },
+        {
+            "date": "2024-07-27",
+            "quantity": 32
+        },
+        {
+            "date": "2024-07-28",
+            "quantity": 19
+        },
+        {
+            "date": "2024-07-29",
+            "quantity": 23
+        },
+        {
+            "date": "2024-07-30",
+            "quantity": 24
+        },
+        {
+            "date": "2024-07-31",
+            "quantity": 53
+        },
+        {
+            "date": "2024-08-01",
+            "quantity": 60
+        },
+        {
+            "date": "2024-08-02",
+            "quantity": 34
+        },
+        {
+            "date": "2024-08-03",
+            "quantity": 28
+        },
+        {
+            "date": "2024-08-04",
+            "quantity": 24
+        },
+        {
+            "date": "2024-08-05",
+            "quantity": 27
+        },
+        {
+            "date": "2024-08-06",
+            "quantity": 11
+        },
+        {
+            "date": "2024-08-07",
+            "quantity": 45
+        },
+        {
+            "date": "2024-08-08",
+            "quantity": 10
+        }
+    ]
+}

@@ -1,9 +1,7 @@
-pandas 
-numpy 
+pandas
 scikit-learn 
-joblib 
 flask 
 flask-jsonpify 
 flask-restful 
 matplotlib 
-seaborn
+prophet

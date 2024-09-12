@@ -19,7 +19,7 @@ public class ChronosProductService(IHttpClientFactory factory) : IChronosProduct
     public async Task<IChronosProductService.CreateProductResponse?> Post(IChronosProductService.CreateProductRequest product)
     {
         var client = factory.CreateClient("Chronos");
-        var request = new HttpRequestMessage(HttpMethod.Post, "api/product")
+        var request = new HttpRequestMessage(HttpMethod.Post, "api/sync/product")
         {
             Content = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json")
         };
@@ -36,7 +36,7 @@ public class ChronosProductService(IHttpClientFactory factory) : IChronosProduct
     public async Task<bool> Put(IChronosProductService.UpdateProduct product)
     {
         var client = factory.CreateClient("Chronos");
-        var request = new HttpRequestMessage(HttpMethod.Put, "api/product")
+        var request = new HttpRequestMessage(HttpMethod.Put, "api/sync/product")
         {
             Content = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json")
         };

@@ -1,5 +1,5 @@
 from flask import Flask
-from routes import bp as routes_bp
+from controllers.PredictionController import bp as routes_bp
 
 api = Flask(__name__)
 

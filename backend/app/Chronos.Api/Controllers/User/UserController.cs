@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Chronos.Api.Controllers;
+namespace Chronos.Api.Controllers.User;
 
 [ApiController]
 [Route("api/user")]
@@ -21,7 +21,7 @@ public class UserController(
 
     [Authorize]
     [HttpDelete("{userId}")]
-    public async Task<IActionResult> DeleteUser([FromRoute] Guid userId)
+    public async Task<IActionResult> Delete([FromRoute] Guid userId)
     {
         var request = new IDeleteUserHandler.Request(userId);
         await deleteUserHandler.Handle(request);
