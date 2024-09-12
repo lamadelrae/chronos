@@ -19,6 +19,7 @@ def predict(json):
     forecast = model.predict(future)
 
     forecast = forecast[['ds', 'yhat']].tail(10)
+    forecast['ds'] = forecast['ds'].dt.strftime('%Y-%m-%d')
     forecast.rename(columns={'ds': 'date', 'yhat': 'quantity'}, inplace=True)
     result = {
         "name": json['product'],

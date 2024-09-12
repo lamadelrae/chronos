@@ -14,6 +14,7 @@ public class PredictionJob(Context dbContext, IPredictionHttpService predictionS
         var stats = await GetProductStats();
 
         var groups = stats.GroupBy(stat => new { stat.Id, stat.Name });
+        await DeleteOldPredictions(groups.Select(group => group.Key.Id));
 
         foreach (var group in groups)
         {
@@ -35,6 +36,8 @@ public class PredictionJob(Context dbContext, IPredictionHttpService predictionS
                 ProductId = group.Key.Id,
                 Sales = prediction.Sales.Select(p => new PredictionSale()
                 {
+                    CreatedAt = DateTime.Now,
+                    LastUpdate = DateTime.Now,
                     Date = p.Date,
                     Quantity = p.Quantity
                 }).ToList()
@@ -43,6 +46,13 @@ public class PredictionJob(Context dbContext, IPredictionHttpService predictionS
             await dbContext.Set<Prediction>().AddAsync(entity);
             await dbContext.SaveChangesAsync();
         }
+    }
+
+    private async Task DeleteOldPredictions(IEnumerable<Guid> products)
+    {
+        var predictions = await dbContext.Set<Prediction>().Where(p => products.Contains(p.ProductId)).ToListAsync();
+        dbContext.Set<Prediction>().RemoveRange(predictions);
+        await dbContext.SaveChangesAsync();
     }
 
     private async Task<IEnumerable<ProductStatistic>> GetProductStats()

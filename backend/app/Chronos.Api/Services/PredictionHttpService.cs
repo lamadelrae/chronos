@@ -20,12 +20,17 @@ public interface IPredictionHttpService
 
 public class PredictionHttpService(IHttpClientFactory factory) : IPredictionHttpService
 {
+    private static readonly JsonSerializerOptions _options = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
     public async Task<IPredictionHttpService.Response?> Post(IPredictionHttpService.Request request)
     {
         var client = factory.CreateClient("Prediction");
         var message = new HttpRequestMessage(HttpMethod.Post, "prediction")
         {
-            Content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json")
+            Content = new StringContent(JsonSerializer.Serialize(request, _options), Encoding.UTF8, "application/json")
         };
 
         var response = await client.SendAsync(message);

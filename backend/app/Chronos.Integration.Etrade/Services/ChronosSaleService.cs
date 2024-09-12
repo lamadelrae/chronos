@@ -21,7 +21,7 @@ public class ChronosSaleService(IHttpClientFactory factory) : IChronosSaleServic
     public async Task<IChronosSaleService.CreateSaleResponse?> Post(IChronosSaleService.CreateSaleRequest sale)
     {
         var client = factory.CreateClient("Chronos");
-        var request = new HttpRequestMessage(HttpMethod.Post, "api/sale")
+        var request = new HttpRequestMessage(HttpMethod.Post, "api/sync/sale")
         {
             Content = new StringContent(JsonSerializer.Serialize(sale), Encoding.UTF8, "application/json")
         };
