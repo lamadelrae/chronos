@@ -1,14 +1,15 @@
+'use client'
+
 import './globals.css'
 
-import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans as plusJakartaSans } from 'next/font/google'
+import { QueryClientProvider } from 'react-query'
+
+import { Toaster } from '@/components/ui/sonner'
+import { AuthContextProvider } from '@/contexts/auth-context'
+import { queryClient } from '@/lib/query-client'
 
 const jakartaSans = plusJakartaSans({ subsets: ['latin'] })
-
-export const metadata: Metadata = {
-  title: 'Chronos',
-  description: 'Chronos',
-}
 
 export default function RootLayout({
   children,
@@ -18,7 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${jakartaSans.className} bg-background`}>
-        {children}
+        <Toaster richColors position="bottom-center" />
+
+        <QueryClientProvider client={queryClient}>
+          <AuthContextProvider>{children}</AuthContextProvider>
+        </QueryClientProvider>
       </body>
     </html>
   )

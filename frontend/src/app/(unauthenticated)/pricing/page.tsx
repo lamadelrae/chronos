@@ -155,7 +155,7 @@ export default function PricingPage() {
                 variant={tier.mostPopular ? 'accent' : 'outline'}
                 className="mt-8 w-full"
               >
-                <Link href="/auth/sign-in" aria-describedby={tier.id}>
+                <Link href="/sign-in" aria-describedby={tier.id}>
                   Começar agora
                 </Link>
               </Button>

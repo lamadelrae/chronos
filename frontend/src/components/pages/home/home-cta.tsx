@@ -21,12 +21,12 @@ export function HomeCTA() {
           </Typography>
           <div className="mt-10 flex items-center justify-center gap-x-4">
             <Button asChild variant="accent">
-              <Link href="/auth/sign-in" aria-describedby="stop-losing-money">
+              <Link href="/sign-in" aria-describedby="stop-losing-money">
                 Comece agora
               </Link>
             </Button>
             <Button asChild variant="link">
-              <Link href="/auth/sign-in" aria-describedby="stop-losing-money">
+              <Link href="/sign-in" aria-describedby="stop-losing-money">
                 Saiba mais
               </Link>
             </Button>
