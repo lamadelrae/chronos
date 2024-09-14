@@ -12,8 +12,8 @@ public interface IFetchMetricsHandler
 
     public record Response(Response.MonthStat Current, Response.MonthStat Last)
     {
-        public record MonthStat(int Year, int Month, int SaleQuantity, decimal Total, decimal AverageTicket, IEnumerable<DayStat> Days);
-        public record DayStat(DateOnly Date, int SaleQuantity, decimal Total, decimal AverageTicket);
+        public record MonthStat(int Year, int Month, int SaleQuantity, decimal Total, decimal AverageTicket, decimal ProductQuantitySold, decimal AverageSellingPrice, IEnumerable<DayStat> Days);
+        public record DayStat(DateOnly Date, int SaleQuantity, decimal Total, decimal AverageTicket, decimal ProductQuantitySold, decimal AverageSellingPrice);
     }
 }
 public class FetchMetricsHandler(Context context, IUserInfo userInfo) : IFetchMetricsHandler
@@ -33,7 +33,9 @@ public class FetchMetricsHandler(Context context, IUserInfo userInfo) : IFetchMe
                 x.Sum(y => y.SaleQuantity),
                 x.Sum(y => y.Total),
                 x.Sum(y => y.Total) / x.Sum(y => y.SaleQuantity),
-                x.Select(y => new IFetchMetricsHandler.Response.DayStat(y.Date, y.SaleQuantity, y.Total, y.AverageTicket))
+                x.Sum(y => y.ProductQuantitySold),
+                x.Sum(y => y.Total) / x.Sum(y => y.ProductQuantitySold),
+                x.Select(y => new IFetchMetricsHandler.Response.DayStat(y.Date, y.SaleQuantity, y.Total, y.AverageTicket, y.ProductQuantitySold, y.AverageSellingPrice))
             ));
 
         return new IFetchMetricsHandler.Response(months.First(), months.Last());
@@ -67,11 +69,14 @@ public class FetchMetricsHandler(Context context, IUserInfo userInfo) : IFetchMe
                 
                 SELECT
                     CAST(Sale.Date AS DATE) Date,
-                    COUNT(*) SaleQuantity,
-	                SUM(Sale.Total) Total,
-	                (SUM(Sale.Total) / COUNT(*)) AverageTicket
+                    COUNT(DISTINCT Sale.Id) SaleQuantity,
+	                SUM(DISTINCT Sale.Total) Total,
+	                (SUM(DISTINCT Sale.Total) / COUNT(DISTINCT Sale.Id)) AverageTicket,
+					SUM(SaleItem.Quantity) ProductQuantitySold,
+					SUM(DISTINCT Sale.Total) / SUM(SaleItem.Quantity) AverageSellingPrice
                 FROM
                     Sale
+                JOIN SaleItem ON Sale.Id = SaleItem.SaleId
                 WHERE
                     Sale.CompanyId = @companyId AND
                     CAST(Sale.Date AS DATE) >= @LastMonthFirstDayByLastSaleDate
