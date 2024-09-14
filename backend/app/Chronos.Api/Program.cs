@@ -2,6 +2,7 @@ using Chronos.Api.ApiConcerns;
 using Chronos.Api.Data;
 using Chronos.Api.Handlers.Auth;
 using Chronos.Api.Handlers.Company;
+using Chronos.Api.Handlers.Metrics;
 using Chronos.Api.Handlers.Prediction;
 using Chronos.Api.Handlers.Product;
 using Chronos.Api.Handlers.Sale;
@@ -92,6 +93,9 @@ builder.Services
     .AddScoped<ISaveCompanyHandler, SaveCompanyHandler>()
     .AddScoped<IFetchCurrentCompanyHandler, FetchCurrentCompanyHandler>()
     .AddScoped<IUpdateCompanyHandler, UpdateCompanyHandler>();
+
+builder.Services
+    .AddScoped<IFetchMetricsHandler, FetchMetricsHandler>();
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 builder.Services.AddTransient<IPredictionHttpService, PredictionHttpService>();
