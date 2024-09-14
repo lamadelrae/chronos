@@ -28,7 +28,7 @@ public class PredictionJob(Context dbContext, IPredictionHttpService predictionS
     private async Task ProcessCompany(Guid companyId)
     {
         await DeleteOldPredictions(companyId);
-        
+
         var stats = await GetProductStats(companyId);
         var groups = stats.GroupBy(stat => new { stat.Id, stat.Name });
 
@@ -71,7 +71,7 @@ public class PredictionJob(Context dbContext, IPredictionHttpService predictionS
         await dbContext.SaveChangesAsync();
     }
 
-    private async Task<IEnumerable<ProductStatistic>> GetProductStats(Guid companyId)
+    private async Task<IEnumerable<DailyProductStatistic>> GetProductStats(Guid companyId)
     {
         var sql = @"
             WITH MostSoldProducts as (
@@ -98,6 +98,6 @@ public class PredictionJob(Context dbContext, IPredictionHttpService predictionS
             	SaleByDay.Date <= MostSoldProducts.LastSaleDate
             ORDER BY Name, [Date]";
 
-        return await dbContext.Database.SqlQueryRaw<ProductStatistic>(sql, new SqlParameter("companyId", companyId)).ToListAsync();
+        return await dbContext.Database.SqlQueryRaw<DailyProductStatistic>(sql, new SqlParameter("companyId", companyId)).ToListAsync();
     }
 }
