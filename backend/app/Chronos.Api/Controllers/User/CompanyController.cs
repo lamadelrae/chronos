@@ -14,8 +14,8 @@ public class CompanyController(
     [HttpPost]
     public async Task<IActionResult> Save([FromBody] ISaveCompanyHandler.Request request)
     {
-        await saveCompanyHandler.Handle(request);
-        return Created();
+        var response = await saveCompanyHandler.Handle(request);
+        return Created("/company", response);
     }
 
     [Authorize]
