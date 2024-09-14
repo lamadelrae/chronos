@@ -1,11 +1,11 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import type { ReactNode } from 'react'
 
 import { AppHeader } from '@/components/app/navigation/app-header'
 import { AppSidebar } from '@/components/app/navigation/app-sidebar'
 import { FullScreenLoader } from '@/components/states/full-screen-loader'
+import NotAuthenticated from '@/components/states/not-authenticated'
 import { useAuth } from '@/hooks/use-auth'
 
 export default function AuthenticatedLayout({
@@ -13,8 +13,6 @@ export default function AuthenticatedLayout({
 }: {
   children: ReactNode
 }) {
-  const router = useRouter()
-
   const { isLoading, isAuthenticated } = useAuth()
 
   if (isLoading) {
@@ -22,7 +20,7 @@ export default function AuthenticatedLayout({
   }
 
   if (!isAuthenticated) {
-    router.push('/')
+    return <NotAuthenticated />
   }
 
   return (

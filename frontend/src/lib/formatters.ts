@@ -1,7 +1,7 @@
-export function formatDate(date: string | Date) {
-  const dateObject = typeof date === 'string' ? new Date(date) : date
+import moment from 'moment'
 
-  return `${dateObject.getDate().toString().padStart(2, '0')}/${(dateObject.getMonth() + 1).toString().padStart(2, '0')}/${dateObject.getFullYear()}`
+export function formatDate(date: string | Date) {
+  return moment(date).format('L')
 }
 
 export function formatCurrency(amount: number) {
@@ -9,4 +9,8 @@ export function formatCurrency(amount: number) {
     currency: 'BRL',
     style: 'currency',
   })
+}
+
+export function formatUnit(amount: number) {
+  return amount.toLocaleString()
 }

@@ -1,8 +1,10 @@
 'use client'
-import { ArrowUpRight, DollarSign, Package2, Users } from 'lucide-react'
+import { ArrowUpRight, DollarSign, Package2, Receipt } from 'lucide-react'
 import Link from 'next/link'
-import { Area, AreaChart, XAxis, YAxis } from 'recharts'
+import { useQuery } from 'react-query'
 
+import { getUserMetrics } from '@/api/metrics/get-user-metrics'
+import { MetricsChartCard } from '@/components/app/cards/metrics-chart-card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -14,11 +16,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@/components/ui/chart'
-import {
   Table,
   TableBody,
   TableCell,
@@ -26,411 +23,96 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { correctMetricsByDay } from '@/lib/helpers/metrics/correct-metrics-by-day'
 
 export default function Dashboard() {
+  const {
+    data: metrics,
+    error: metricsError,
+    isLoading: isMetricsLoading,
+  } = useQuery({
+    queryFn: getUserMetrics,
+    queryKey: ['user-metrics'],
+  })
+
+  if (isMetricsLoading) return null
+  if (!metrics) return null
+
+  const correctedMetrics = correctMetricsByDay(metrics)
+
   return (
     <div className="flex flex-col gap-4 md:gap-8">
       <div className="grid gap-4 grid-cols-2 md:gap-8 lg:grid-cols-4">
-        <Card className="w-full" x-chunk="charts-01-chunk-7">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Faturamento</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="text-2xl font-bold px-6">R$943,00</div>
-            <p className="text-xs text-muted-foreground px-6">
-              +19% que mês passado
-            </p>
-            <ChartContainer
-              className="h-[140px] w-full"
-              config={{
-                time: {
-                  label: 'Time',
-                  color: 'hsl(var(--chart-2))',
-                },
-              }}
-            >
-              <AreaChart
-                accessibilityLayer
-                data={[
-                  {
-                    date: '2024-01-01',
-                    time: 8.5,
-                  },
-                  {
-                    date: '2024-01-02',
-                    time: 7.2,
-                  },
-                  {
-                    date: '2024-01-03',
-                    time: 8.1,
-                  },
-                  {
-                    date: '2024-01-04',
-                    time: 6.2,
-                  },
-                  {
-                    date: '2024-01-05',
-                    time: 5.2,
-                  },
-                  {
-                    date: '2024-01-06',
-                    time: 8.1,
-                  },
-                  {
-                    date: '2024-01-07',
-                    time: 7.0,
-                  },
-                ]}
-                margin={{
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                }}
-              >
-                <XAxis dataKey="date" hide />
-                <YAxis domain={['dataMin - 5', 'dataMax + 2']} hide />
-                <defs>
-                  <linearGradient id="fillTime" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="5%"
-                      stopColor="var(--color-time)"
-                      stopOpacity={0.8}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="var(--color-time)"
-                      stopOpacity={0.1}
-                    />
-                  </linearGradient>
-                </defs>
-                <Area
-                  dataKey="time"
-                  type="natural"
-                  fill="url(#fillTime)"
-                  fillOpacity={0.4}
-                  stroke="var(--color-time)"
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
-                  formatter={(value) => (
-                    <div className="flex min-w-[120px] items-center text-xs text-muted-foreground">
-                      Time in bed
-                      <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
-                        {value}
-                        <span className="font-normal text-muted-foreground">
-                          hr
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                />
-              </AreaChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-        <Card className="w-full" x-chunk="charts-01-chunk-7">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Vendas</CardTitle>
-            <Package2 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="text-2xl font-bold px-6">12,234</div>
-            <p className="text-xs text-muted-foreground px-6">
-              -50% que mês passado
-            </p>
-            <ChartContainer
-              className="h-[140px] w-full"
-              config={{
-                time: {
-                  label: 'Time',
-                  color: 'hsl(var(--chart-1))',
-                },
-              }}
-            >
-              <AreaChart
-                accessibilityLayer
-                data={[
-                  {
-                    date: '2024-01-01',
-                    time: 8.5,
-                  },
-                  {
-                    date: '2024-01-02',
-                    time: 7.2,
-                  },
-                  {
-                    date: '2024-01-03',
-                    time: 8.1,
-                  },
-                  {
-                    date: '2024-01-04',
-                    time: 6.2,
-                  },
-                  {
-                    date: '2024-01-05',
-                    time: 5.2,
-                  },
-                  {
-                    date: '2024-01-06',
-                    time: 8.1,
-                  },
-                  {
-                    date: '2024-01-07',
-                    time: 7.0,
-                  },
-                ]}
-                margin={{
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                }}
-              >
-                <XAxis dataKey="date" hide />
-                <YAxis domain={['dataMin - 5', 'dataMax + 2']} hide />
-                <defs>
-                  <linearGradient id="fillnegative" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="5%"
-                      stopColor="var(--color-time)"
-                      stopOpacity={0.8}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="var(--color-time)"
-                      stopOpacity={0.1}
-                    />
-                  </linearGradient>
-                </defs>
-                <Area
-                  dataKey="time"
-                  type="natural"
-                  fill="url(#fillnegative)"
-                  fillOpacity={0.4}
-                  stroke="var(--color-time)"
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
-                  formatter={(value) => (
-                    <div className="flex min-w-[120px] items-center text-xs text-muted-foreground">
-                      Time in bed
-                      <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
-                        {value}
-                        <span className="font-normal text-muted-foreground">
-                          hr
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                />
-              </AreaChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-        <Card className="w-full" x-chunk="charts-01-chunk-7">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Previsão</CardTitle>
-            <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="text-2xl font-bold px-6">-355</div>
-            <p className="text-xs text-muted-foreground px-6">
-              Em falta para o restante do mês
-            </p>
-            <ChartContainer
-              className="h-[140px] w-full"
-              config={{
-                time: {
-                  label: 'Time',
-                  color: 'hsl(var(--chart-1))',
-                },
-              }}
-            >
-              <AreaChart
-                accessibilityLayer
-                data={[
-                  {
-                    date: '2024-01-01',
-                    time: 8.5,
-                  },
-                  {
-                    date: '2024-01-02',
-                    time: 7.2,
-                  },
-                  {
-                    date: '2024-01-03',
-                    time: 8.1,
-                  },
-                  {
-                    date: '2024-01-04',
-                    time: 6.2,
-                  },
-                  {
-                    date: '2024-01-05',
-                    time: 5.2,
-                  },
-                  {
-                    date: '2024-01-06',
-                    time: 8.1,
-                  },
-                  {
-                    date: '2024-01-07',
-                    time: 7.0,
-                  },
-                ]}
-                margin={{
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                }}
-              >
-                <XAxis dataKey="date" hide />
-                <YAxis domain={['dataMin - 5', 'dataMax + 2']} hide />
-                <defs>
-                  <linearGradient id="fillTime" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="5%"
-                      stopColor="var(--color-time)"
-                      stopOpacity={0.8}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="var(--color-time)"
-                      stopOpacity={0.1}
-                    />
-                  </linearGradient>
-                </defs>
-                <Area
-                  dataKey="time"
-                  type="natural"
-                  fill="url(#fillnegative)"
-                  fillOpacity={0.4}
-                  stroke="var(--color-time)"
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
-                  formatter={(value) => (
-                    <div className="flex min-w-[120px] items-center text-xs text-muted-foreground">
-                      Time in bed
-                      <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
-                        {value}
-                        <span className="font-normal text-muted-foreground">
-                          hr
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                />
-              </AreaChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-        <Card className="w-full" x-chunk="charts-01-chunk-7">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Clientes</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="text-2xl font-bold px-6">12,234</div>
-            <p className="text-xs text-muted-foreground px-6">
-              +19% que mês passado
-            </p>
-            <ChartContainer
-              className="h-[140px] w-full"
-              config={{
-                time: {
-                  label: 'Time',
-                  color: 'hsl(var(--chart-2))',
-                },
-              }}
-            >
-              <AreaChart
-                accessibilityLayer
-                data={[
-                  {
-                    date: '2024-01-01',
-                    time: 8.5,
-                  },
-                  {
-                    date: '2024-01-02',
-                    time: 7.2,
-                  },
-                  {
-                    date: '2024-01-03',
-                    time: 8.1,
-                  },
-                  {
-                    date: '2024-01-04',
-                    time: 6.2,
-                  },
-                  {
-                    date: '2024-01-05',
-                    time: 5.2,
-                  },
-                  {
-                    date: '2024-01-06',
-                    time: 8.1,
-                  },
-                  {
-                    date: '2024-01-07',
-                    time: 7.0,
-                  },
-                ]}
-                margin={{
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                }}
-              >
-                <XAxis dataKey="date" hide />
-                <YAxis domain={['dataMin - 5', 'dataMax + 2']} hide />
-                <defs>
-                  <linearGradient id="fillTime" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="5%"
-                      stopColor="var(--color-time)"
-                      stopOpacity={0.8}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="var(--color-time)"
-                      stopOpacity={0.1}
-                    />
-                  </linearGradient>
-                </defs>
-                <Area
-                  dataKey="time"
-                  type="natural"
-                  fill="url(#fillTime)"
-                  fillOpacity={0.4}
-                  stroke="var(--color-time)"
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
-                  formatter={(value) => (
-                    <div className="flex min-w-[120px] items-center text-xs text-muted-foreground">
-                      Time in bed
-                      <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
-                        {value}
-                        <span className="font-normal text-muted-foreground">
-                          hr
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                />
-              </AreaChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
+        <MetricsChartCard
+          id="MMR"
+          type="currency"
+          title="Faturamento"
+          icon={DollarSign}
+          value={correctedMetrics.current.total}
+          change={
+            ((correctedMetrics.current.total - correctedMetrics.last.total) /
+              correctedMetrics.last.total) *
+            100
+          }
+          dataKey={'total'}
+          valueLabel="Faturamento"
+          chartData={correctedMetrics.current.days}
+          lastMonthData={correctedMetrics.last.days}
+        />
+
+        <MetricsChartCard
+          id="sales"
+          type="unit"
+          title="Vendas"
+          icon={Package2}
+          value={correctedMetrics.current.saleQuantity}
+          change={
+            ((correctedMetrics.current.saleQuantity -
+              correctedMetrics.last.saleQuantity) /
+              correctedMetrics.last.saleQuantity) *
+            100
+          }
+          dataKey={'saleQuantity'}
+          valueLabel="Vendas"
+          chartData={correctedMetrics.current.days}
+          lastMonthData={correctedMetrics.last.days}
+        />
+
+        <MetricsChartCard
+          id="average-ticket"
+          type="currency"
+          title="Ticket Médio"
+          icon={Receipt}
+          value={correctedMetrics.current.averageTicket}
+          change={
+            ((correctedMetrics.current.averageTicket -
+              correctedMetrics.last.averageTicket) /
+              correctedMetrics.last.averageTicket) *
+            100
+          }
+          dataKey={'averageTicket'}
+          valueLabel="Ticket Médio"
+          chartData={correctedMetrics.current.days}
+          lastMonthData={correctedMetrics.last.days}
+        />
+
+        <MetricsChartCard
+          id="pmv"
+          type="currency"
+          title="Preço Médio de Venda"
+          icon={Package2}
+          value={correctedMetrics.current.averageSellingPrice}
+          change={
+            ((correctedMetrics.current.averageSellingPrice -
+              correctedMetrics.last.averageSellingPrice) /
+              correctedMetrics.last.averageSellingPrice) *
+            100
+          }
+          dataKey={'averageSellingPrice'}
+          valueLabel="Preço Médio de Venda"
+          chartData={correctedMetrics.current.days}
+          lastMonthData={correctedMetrics.last.days}
+        />
       </div>
       <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
         <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">

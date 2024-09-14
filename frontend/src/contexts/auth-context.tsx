@@ -114,7 +114,6 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
         setIsAuthenticated(true)
       } catch (error) {
         console.error(error)
-        signOut()
       } finally {
         setIsLoading(false)
       }

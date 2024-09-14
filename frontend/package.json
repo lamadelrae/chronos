@@ -28,6 +28,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "lucide-react": "^0.408.0",
+    "moment": "^2.30.1",
     "next": "14.2.5",
     "next-themes": "^0.3.0",
     "nookies": "^2.5.2",
