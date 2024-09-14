@@ -7,12 +7,12 @@ namespace Chronos.Api.Controllers.User;
 [Authorize]
 [ApiController]
 [Route("api/user/metrics")]
-public class MetricsController(IFetchMetricsHandler fetchGrossIncomeComparisonHandler) : ControllerBase
+public class MetricsController(IFetchMetricsHandler fetchMetricsHandler) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> Fetch()
     {
-        var response = await fetchGrossIncomeComparisonHandler.Handle();
+        var response = await fetchMetricsHandler.Handle();
         return Ok(response);
     }
 }
