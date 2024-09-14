@@ -6,17 +6,19 @@ namespace Chronos.Api.Handlers.Company;
 
 public interface ISaveCompanyHandler
 {
-    Task Handle(Request request);
+    Task<Response> Handle(Request request);
 
     public record Request(string CompanyName, string SocialReason, string Cnpj, Request.RequestAddress Address)
     {
         public record RequestAddress(string Address, string City, State State, string ZipCode);
     };
+
+    public record Response(Guid Id); 
 }
 
 public class SaveCompanyHandler(Context context) : ISaveCompanyHandler
 {
-    public async Task Handle(ISaveCompanyHandler.Request request)
+    public async Task<ISaveCompanyHandler.Response> Handle(ISaveCompanyHandler.Request request)
     {
         Validate(request);
 
@@ -39,6 +41,8 @@ public class SaveCompanyHandler(Context context) : ISaveCompanyHandler
 
         await context.Set<Entities.Company>().AddAsync(company);
         await context.SaveChangesAsync();
+
+        return new ISaveCompanyHandler.Response(company.Id);
     }
 
     private static void Validate(ISaveCompanyHandler.Request request)
