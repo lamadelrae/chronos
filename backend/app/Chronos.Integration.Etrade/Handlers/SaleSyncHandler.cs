@@ -122,7 +122,7 @@ public class SaleSyncHandler(
 
                 await integrationContext.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 continue;
             }
