@@ -25,7 +25,7 @@ export function DataTablePagination({
   const pages = Math.ceil(totalCount / perPage) || 1
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between w-full">
       <span className="text-sm text-muted-foreground">
         {formatUnit(totalCount)} resultados
       </span>

@@ -6,7 +6,15 @@ import { z } from 'zod'
 
 import { getSalesApi } from '@/api/sale/get-sales-api'
 import { DataTablePagination } from '@/components/data-table/data-table-pagination'
-import { Typography } from '@/components/ui/typography'
+import { DataTablePaginationSkeleton } from '@/components/data-table/data-table-pagination-skeleton'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 
 import { SalesTable } from './sales-table'
 
@@ -35,25 +43,29 @@ export default function SalesPage() {
   const sales = results?.data ?? []
 
   return (
-    <div className="flex flex-col gap-4">
-      <Typography variant="h2" as="h1">
-        Vendas
-      </Typography>
-
-      <div className="space-y-2.5">
-        <div className="rounded-md border bg-white">
-          <SalesTable isLoading={isLoading} sales={sales} />
-        </div>
-
-        {results && sales.length > 0 && (
-          <DataTablePagination
-            onPageChange={handlePaginate}
-            pageIndex={results.currentPage}
-            totalCount={results.totalItems}
-            perPage={results.pageSize}
-          />
+    <Card>
+      <CardHeader>
+        <CardTitle>Pedidos</CardTitle>
+        <CardDescription>Vendas recentes feitas por sua loja</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <SalesTable isLoading={isLoading} sales={sales} />
+      </CardContent>
+      <CardFooter className="w-full">
+        {isLoading ? (
+          <DataTablePaginationSkeleton />
+        ) : (
+          results &&
+          sales.length > 0 && (
+            <DataTablePagination
+              onPageChange={handlePaginate}
+              pageIndex={results.currentPage}
+              totalCount={results.totalItems}
+              perPage={results.pageSize}
+            />
+          )
         )}
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   )
 }
