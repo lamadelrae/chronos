@@ -41,7 +41,7 @@ public class SaleSyncHandler(
             await CreateAll(syncedProducts, ToCreate(syncedSales, batch));
         }
     }
-
+        
     private async Task<IEnumerable<Sale>> GetAllSalesAsync(DateTime lastSync)
     {
         var sql = @"
@@ -55,7 +55,7 @@ public class SaleSyncHandler(
             	Valor_Total [SaleItemTotal]
             FROM Movimento
             	JOIN  Movimento_Produto ON Movimento.Ide = Movimento_Produto.Movimento__Ide
-            WHERE Tipo_Operacao = 'VND' AND Efetivado = 1 AND Data >= @lastSync
+            WHERE Tipo_Operacao = 'VND' AND Movimento_Produto.Tipo = 'S' AND Efetivado = 1 AND Data >= @lastSync
             ORDER BY Data";
 
         return (await etradeContext.Database.SqlQueryRaw<Sale.DataRecord>(sql, new SqlParameter("lastSync", lastSync)).ToListAsync())

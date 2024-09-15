@@ -55,9 +55,9 @@ builder.Services.AddQuartz(q =>
     .WithIdentity("Job-trigger")
     .WithSchedule(CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Sunday, 2, 0)));
 
-    q.AddTrigger(t => t.ForJob(key)
-    .WithIdentity("Job-now-trigger")
-    .StartNow());
+    //q.AddTrigger(t => t.ForJob(key)
+    //.WithIdentity("Job-now-trigger")
+    //.StartNow());
 });
 
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);

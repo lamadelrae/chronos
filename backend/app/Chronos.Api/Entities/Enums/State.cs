@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace Chronos.Api.Entities.Enums;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum State
 {
     [Description("Acre")]

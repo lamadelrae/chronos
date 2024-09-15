@@ -10,9 +10,15 @@ namespace Chronos.Api.Controllers.User;
 public class ProductController(IFetchProductsHandler fetchProductsHandler) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Fetch([FromQuery] int page, [FromQuery] int size, [FromQuery] Guid[]? ids)
+    public async Task<IActionResult> Fetch(
+        [FromQuery] int page,
+        [FromQuery] int size,
+        [FromQuery] string? name,
+        [FromQuery] IFetchProductsHandler.SortBy? sortBy,
+        [FromQuery] bool ascending,
+        [FromQuery] Guid[]? ids)
     {
-        var request = new IFetchProductsHandler.Request(page, size, ids);
+        var request = new IFetchProductsHandler.Request(page, size, name, ids, sortBy, ascending);
         var response = await fetchProductsHandler.Handle(request);
         return Ok(response);
     }
