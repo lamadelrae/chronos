@@ -23,9 +23,13 @@ export function AppSidebar() {
             <ChronosLogo className="h-4 w-4 transition-all group-hover:scale-110" />
             <span className="sr-only">Chronos</span>
           </Link>
-          {APP_NAVIGATION.map((navigationItem) => (
+          {APP_NAVIGATION.map((navigationItem, index) => (
             <Tooltip key={navigationItem.name}>
-              <TooltipTrigger asChild>
+              <TooltipTrigger
+                className='data-[hidden="true"]:hidden'
+                data-hidden={index === APP_NAVIGATION.length - 1}
+                asChild
+              >
                 <Link
                   href={navigationItem.path}
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"

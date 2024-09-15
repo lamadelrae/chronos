@@ -3,14 +3,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { ChronosLogo } from '@/components/icons/chronos-logo'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -24,6 +16,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { APP_NAVIGATION } from '@/constants/app-navigation'
+
+import { SmartBreadcrumbs } from './smart-breadcrumbs'
 
 export function AppHeader() {
   return (
@@ -57,25 +51,7 @@ export function AppHeader() {
           </nav>
         </SheetContent>
       </Sheet>
-      <Breadcrumb className="hidden md:flex">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="#">Dashboard</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="#">Produtos</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Todos</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <SmartBreadcrumbs />
       <div className="relative ml-auto flex-1 md:grow-0">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input

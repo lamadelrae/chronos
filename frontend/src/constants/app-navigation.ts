@@ -3,8 +3,8 @@ import {
   LineChart,
   type LucideIcon,
   Package,
+  Settings,
   ShoppingCart,
-  Users2,
 } from 'lucide-react'
 
 interface AppNavigation {
@@ -30,13 +30,13 @@ export const APP_NAVIGATION: AppNavigation[] = [
     path: '/products',
   },
   {
-    icon: Users2,
-    name: 'Clients',
-    path: '/customers',
-  },
-  {
     icon: LineChart,
     name: 'Previsões e Análises',
     path: '/analytics',
+  },
+  {
+    icon: Settings,
+    name: 'Configurações',
+    path: '/settings',
   },
 ]
