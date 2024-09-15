@@ -10,9 +10,9 @@ namespace Chronos.Api.Controllers.User;
 public class MetricsController(IFetchMetricsHandler fetchMetricsHandler) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Fetch()
+    public async Task<IActionResult> Fetch([FromQuery] DateTime date)
     {
-        var response = await fetchMetricsHandler.Handle();
+        var response = await fetchMetricsHandler.Handle(DateOnly.FromDateTime(date));
         return Ok(response);
     }
 }
