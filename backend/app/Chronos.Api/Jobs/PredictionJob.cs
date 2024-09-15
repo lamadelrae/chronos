@@ -80,7 +80,7 @@ public class PredictionJob(Context dbContext, IPredictionHttpService predictionS
             		JOIN Sale ON Sale.Id = SaleItem.SaleId
             	WHERE Product.CompanyId = @companyId
             	GROUP BY Product.Id
-            	ORDER BY COUNT(*) DESC
+            	ORDER BY SUM(SaleItem.Quantity) DESC
             ),
             SaleByDay AS (
             	SELECT Product.Id, Product.Name, CAST(Sale.Date AS DATE) [Date], COUNT(*) Sales

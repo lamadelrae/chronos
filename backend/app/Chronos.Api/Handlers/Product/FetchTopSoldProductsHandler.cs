@@ -39,7 +39,7 @@ public class FetchTopSoldProductsHandler(Context context, IUserInfo userInfo) : 
                 	Product.Id,
                 	Product.Name
                 ORDER BY
-                	COUNT(*) DESC;";
+                	SUM(SaleItem.Quantity) DESC;";
 
         return await context.Database.SqlQueryRaw<ProductSoldStatistic>(sql, new SqlParameter("companyId", userInfo.CompanyId)).ToListAsync();
     }
