@@ -11,9 +11,9 @@ namespace Chronos.Api.Controllers.User;
 public class PredictionController(IFetchPredictionsHandler fetchPredictionsHandler) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Fetch()
+    public async Task<IActionResult> Fetch(Guid? productId)
     {
-        var response = await fetchPredictionsHandler.Handle();
+        var response = await fetchPredictionsHandler.Handle(productId);
         return Ok(response);
     }
 }
