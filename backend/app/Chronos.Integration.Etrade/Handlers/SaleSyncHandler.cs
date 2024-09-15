@@ -18,32 +18,39 @@ public class SaleSyncHandler(
     ILastSyncService lastSyncService,
     IChronosSaleService saleService,
     IConfiguration config,
-    EtradeContext etradeContext,
-    IntegrationContext integrationContext) : ISaleSyncHandler
+    IServiceScopeFactory scopeFactory) : ISaleSyncHandler
 {
     private readonly Guid CompanyId = config.GetValue<Guid>("Chronos:CompanyId");
 
     public async Task Handle()
     {
-        var lastSync = await lastSyncService.Get();
-
-        var toSync = (await GetAllSalesAsync(lastSync)).ToBatchesOf(1000);
+        var semaphore = new SemaphoreSlim(10);
+        var toSync = (await GetAllSalesAsync(await lastSyncService.Get())).ToBatchesOf(1000);
         var syncedProducts = await GetAllSyncedProducts();
 
         foreach (var batch in toSync)
         {
-            var ids = batch.Select(sale => sale.Id);
-            var syncedSales = (await integrationContext
-                .Set<SyncedSale>()
-                .Where(synced => ids.Contains(synced.Id))
-                .ToListAsync());
+            await semaphore.WaitAsync();
 
-            await CreateAll(syncedProducts, ToCreate(syncedSales, batch));
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await ProcessBatch(syncedProducts, batch);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
+            });
         }
     }
         
     private async Task<IEnumerable<Sale>> GetAllSalesAsync(DateTime lastSync)
     {
+        var scope = scopeFactory.CreateScope();
+        using var etradeContext = scope.ServiceProvider.GetRequiredService<EtradeContext>();
+
         var sql = @"
             SELECT 
             	Movimento.Ide AS [SaleId],
@@ -64,8 +71,25 @@ public class SaleSyncHandler(
             .ToList();
     }
 
+    private async Task ProcessBatch(Dictionary<Guid, Guid> syncedProducts, List<Sale> sales)
+    {
+        var scope = scopeFactory.CreateScope();
+        using var integrationContext = scope.ServiceProvider.GetRequiredService<IntegrationContext>();
+
+        var ids = sales.Select(sale => sale.Id);
+        var syncedSales = (await integrationContext
+            .Set<SyncedSale>()
+            .Where(synced => ids.Contains(synced.Id))
+            .ToListAsync());
+
+        await CreateAll(integrationContext, syncedProducts, ToCreate(syncedSales, sales));
+    }
+
     private async Task<Dictionary<Guid, Guid>> GetAllSyncedProducts()
     {
+        var scope = scopeFactory.CreateScope();
+        using var integrationContext = scope.ServiceProvider.GetRequiredService<IntegrationContext>();
+
         var products = await integrationContext.Set<SyncedProduct>().ToListAsync();
         return products.ToDictionary(product => product.EtradeId, product => product.ChronosId);
     }
@@ -75,7 +99,7 @@ public class SaleSyncHandler(
         return sales.Where(sale => !synced.Any(synced => synced.Id == sale.Id));
     }
 
-    private async Task CreateAll(Dictionary<Guid, Guid> syncedProducts, IEnumerable<Sale> sales)
+    private async Task CreateAll(IntegrationContext integrationContext, Dictionary<Guid, Guid> syncedProducts, IEnumerable<Sale> sales)
     {
         foreach (var sale in sales)
         {
@@ -98,7 +122,7 @@ public class SaleSyncHandler(
 
                 await integrationContext.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 continue;
             }
