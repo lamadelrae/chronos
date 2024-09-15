@@ -9,7 +9,7 @@ namespace Chronos.Api.Handlers.Company;
 public interface IFetchCurrentCompanyHandler
 {
     Task<Response> Handle();
-    public record Response(Guid Id, string CompanyName, string SocialReason, string Cnpj, Response.ResponseAddress Companyaddress)
+    public record Response(Guid Id, string CompanyName, string SocialReason, string Cnpj, Response.ResponseAddress Address)
     {
         public record ResponseAddress(string Address, string City, State State, string ZipCode);
     }
