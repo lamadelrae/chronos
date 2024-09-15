@@ -77,6 +77,7 @@ builder.Services
 
 builder.Services
     .AddScoped<ISaveProductHandler, SaveProductHandler>()
+    .AddScoped<IFetchTopSoldProductsHandler, FetchTopSoldProductsHandler>()
     .AddScoped<IUpdateProductHandler, UpdateProductHandler>()
     .AddScoped<IFetchProductsHandler, FetchProductsHandler>();
 
