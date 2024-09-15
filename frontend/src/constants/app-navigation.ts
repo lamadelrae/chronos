@@ -22,7 +22,7 @@ export const APP_NAVIGATION: AppNavigation[] = [
   {
     icon: ShoppingCart,
     name: 'Vendas',
-    path: '/orders',
+    path: '/sales',
   },
   {
     icon: Package,
