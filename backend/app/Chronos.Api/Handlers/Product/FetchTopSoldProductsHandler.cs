@@ -18,7 +18,7 @@ public class FetchTopSoldProductsHandler(Context context, IUserInfo userInfo) : 
     public async Task<IEnumerable<IFetchTopSoldProductsHandler.Response>> Handle()
     {
         return (await GetProductStats())
-            .Select(stat => new IFetchTopSoldProductsHandler.Response(stat.Id, stat.Name, stat.Quantity, stat.Total));  
+            .Select(stat => new IFetchTopSoldProductsHandler.Response(stat.Id, stat.Name, stat.Quantity, stat.Total));
     }
 
     private async Task<IEnumerable<ProductSoldStatistic>> GetProductStats()
@@ -28,7 +28,7 @@ public class FetchTopSoldProductsHandler(Context context, IUserInfo userInfo) : 
                 	TOP 50 
                     Product.Id,
                 	Product.Name,
-                	SUM(SaleItem.Quantity) Quantity,SqlQueryRaw
+                	SUM(SaleItem.Quantity) Quantity,
                 	SUM (SaleItem.Total) Total
                 FROM
                 	Product
