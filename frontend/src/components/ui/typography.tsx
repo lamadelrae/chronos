@@ -10,6 +10,8 @@ const typographyVariants = cva('', {
       h1: 'text-4xl font-bold tracking-tight text-foreground sm:text-6xl',
       h2: 'text-3xl font-bold tracking-tight text-foreground sm:text-4xl',
       h3: 'text-2xl font-bold tracking-tight text-foreground sm:text-3xl',
+      h4: 'text-xl font-bold tracking-tight text-foreground sm:text-2xl',
+      h5: 'text-lg font-bold tracking-tight text-foreground sm:text-base',
       h6: 'text-base font-semibold text-accent',
       p: 'text-base text-muted-foreground',
       span: 'text-sm text-foreground hover:text-foreground/70',
@@ -25,7 +27,7 @@ export interface TypographyProps
   extends React.HTMLAttributes<HTMLParagraphElement>,
     VariantProps<typeof typographyVariants> {
   asChild?: boolean
-  as?: 'h1' | 'h2' | 'h3' | 'h6' | 'p' | 'span' | 'small'
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'small'
 }
 
 const Typography = React.forwardRef<HTMLParagraphElement, TypographyProps>(

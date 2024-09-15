@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 import { api } from '@/lib/api'
 
 interface GetUserMetricsResponseItem {
@@ -23,8 +25,18 @@ export interface GetUserMetricsResponse {
   last: GetUserMetricsResponseItem
 }
 
-export async function getUserMetrics(): Promise<GetUserMetricsResponse> {
-  const { data } = await api.get<GetUserMetricsResponse>('/user/metrics')
+export interface GetUserMetricsProps {
+  date: string | Date
+}
+
+export async function getUserMetrics({
+  date = new Date(),
+}: GetUserMetricsProps): Promise<GetUserMetricsResponse> {
+  const formattedDate = moment(date).endOf('month').format('YYYY-MM-DD')
+
+  const { data } = await api.get<GetUserMetricsResponse>(
+    `/user/metrics?date=${formattedDate}`,
+  )
 
   return data
 }

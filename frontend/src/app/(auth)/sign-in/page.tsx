@@ -23,9 +23,7 @@ import { useAuth } from '@/hooks/use-auth'
 
 const formSchema = z.object({
   email: z.string({ message: 'Obrigatório' }).email('E-mail inválido'),
-  password: z
-    .string({ message: 'Obrigatório' })
-    .min(2, 'Mínimo de 2 caracteres'),
+  password: z.string({ message: 'Obrigatório' }).min(1, 'Mínimo de 1 caracter'),
 })
 
 export default function SignInPage() {
