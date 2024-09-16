@@ -16,30 +16,38 @@ public interface IProductSyncHandler
 public class ProductSyncHandler(
     IChronosProductService service,
     IConfiguration config,
-    EtradeContext etradeContext,
-    IntegrationContext integrationContext) : IProductSyncHandler
+    IServiceScopeFactory scopeFactory) : IProductSyncHandler
 {
     private readonly Guid CompanyId = config.GetValue<Guid>("Chronos:CompanyId");
 
     public async Task Handle()
     {
+        var semaphore = new SemaphoreSlim(5);
         var toSync = (await GetAllProducts()).ToBatchesOf(1000);
 
         foreach (var batch in toSync)
         {
-            var ids = batch.Select(product => product.Id);
-            var syncedProducts = await integrationContext
-                .Set<SyncedProduct>()
-                .Where(synced => ids.Contains(synced.EtradeId))
-                .ToListAsync();
+            await semaphore.WaitAsync();
 
-            await CreateAll(ToCreate(syncedProducts, batch));
-            await UpdateAll(ToUpdate(syncedProducts, batch));
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await ProcessBatch(batch);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
+            });
         }
     }
 
     private async Task<IEnumerable<Product>> GetAllProducts()
     {
+        var scope = scopeFactory.CreateScope();
+        using var etradeContext = scope.ServiceProvider.GetRequiredService<EtradeContext>();
+
         var sql = @"
 	        SELECT 
 	        	P.Ide AS Id,
@@ -48,10 +56,25 @@ public class ProductSyncHandler(
 	        FROM Produto P
 	        	JOIN ProdutoPreco PP ON P.Ide = PP.Produto__Ide
 	        	JOIN TabelaPreco TP ON PP.TabelaPreco__Ide = TP.Ide
-	        WHERE TP.Custo = 0 AND P.Inativo = 0
+	        WHERE TP.Custo = 0
 	        ORDER BY P.Id";
 
         return await etradeContext.Database.SqlQueryRaw<Product>(sql).ToListAsync();
+    }
+
+    private async Task ProcessBatch(List<Product> products)
+    {
+        var scope = scopeFactory.CreateScope();
+        using var integrationContext = scope.ServiceProvider.GetRequiredService<IntegrationContext>();
+
+        var ids = products.Select(product => product.Id);
+        var syncedProducts = await integrationContext
+            .Set<SyncedProduct>()
+            .Where(synced => ids.Contains(synced.EtradeId))
+            .ToListAsync();
+
+        await CreateAll(integrationContext, ToCreate(syncedProducts, products));
+        await UpdateAll(integrationContext, ToUpdate(syncedProducts, products));
     }
 
     private static IEnumerable<Product> ToCreate(IEnumerable<SyncedProduct> synced, IEnumerable<Product> products)
@@ -59,7 +82,7 @@ public class ProductSyncHandler(
         return products.Where(product => !synced.Any(synced => synced.EtradeId == product.Id));
     }
 
-    public async Task CreateAll(IEnumerable<Product> products)
+    public async Task CreateAll(IntegrationContext integrationContext, IEnumerable<Product> products)
     {
         foreach (var product in products)
         {
@@ -105,7 +128,7 @@ public class ProductSyncHandler(
         return response.AsEnumerable();
     }
 
-    public async Task UpdateAll(IEnumerable<KeyValuePair<SyncedProduct, Product>> products)
+    public async Task UpdateAll(IntegrationContext integrationContext, IEnumerable<KeyValuePair<SyncedProduct, Product>> products)
     {
         foreach (var kvp in products)
         {
@@ -126,7 +149,7 @@ public class ProductSyncHandler(
 
                 await integrationContext.SaveChangesAsync();
             }
-            catch(Exception)
+            catch (Exception)
             {
                 continue;
             }
