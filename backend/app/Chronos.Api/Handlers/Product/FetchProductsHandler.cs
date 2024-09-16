@@ -21,11 +21,15 @@ public class FetchProductsHandler(Context context, IUserInfo userInfo) : IFetchP
 {
     public async Task<PaginatedResponse<IFetchProductsHandler.Response>> Handle(IFetchProductsHandler.Request request)
     {
-        var products = await BuildQuery(request)
+        var query = BuildQuery(request);
+
+        var products = await query
+            .Skip(request.PageSize * request.Page)
+            .Take(request.PageSize)
             .Select(x => new IFetchProductsHandler.Response(x.Id, x.Name, x.Price))
             .ToListAsync();
 
-        var count = await context.Set<Entities.Product>().CountAsync();
+        var count = await query.CountAsync();
 
         return new PaginatedResponse<IFetchProductsHandler.Response>(request.Page, request.PageSize)
             .SetData(products)
@@ -67,6 +71,6 @@ public class FetchProductsHandler(Context context, IUserInfo userInfo) : IFetchP
                 : query.OrderByDescending(product => product.CreatedAt);
         }
 
-        return query.Skip(request.PageSize * request.Page).Take(request.PageSize);
+        return query;
     }
 }
