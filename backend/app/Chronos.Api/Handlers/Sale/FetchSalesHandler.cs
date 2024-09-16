@@ -25,11 +25,14 @@ public class FetchSalesHandler(Context context, IUserInfo userInfo) : IFetchSale
 {
     public async Task<PaginatedResponse<IFetchSalesHandler.Response>> Handle(IFetchSalesHandler.Request request)
     {
-        var sales = await BuildQuery(request)
+        var query = BuildQuery(request);
+
+        var sales = await query
+            .Skip(request.PageSize * request.Page).Take(request.PageSize)
             .Select(sale => new IFetchSalesHandler.Response(sale.Id, sale.Date, sale.Total, sale.Items.Select(item => new IFetchSalesHandler.Response.Item(item.ProductId, item.Product.Name, item.Price, item.Quantity))))
             .ToListAsync();
 
-        var count = await context.Set<Entities.Sale>().CountAsync();
+        var count = await query.CountAsync();
 
         return new PaginatedResponse<IFetchSalesHandler.Response>(request.Page, request.PageSize)
             .SetData(sales)
@@ -54,18 +57,18 @@ public class FetchSalesHandler(Context context, IUserInfo userInfo) : IFetchSale
         }
 
         if (request.SortBy == IFetchSalesHandler.SortBy.Date)
-        { 
-            query = request.Ascending 
-                ? query.OrderBy(sale => sale.Date) 
+        {
+            query = request.Ascending
+                ? query.OrderBy(sale => sale.Date)
                 : query.OrderByDescending(sale => sale.Date);
         }
         else if (request.SortBy == IFetchSalesHandler.SortBy.Total)
         {
-            query = request.Ascending 
-                ? query.OrderBy(sale => sale.Total) 
+            query = request.Ascending
+                ? query.OrderBy(sale => sale.Total)
                 : query.OrderByDescending(sale => sale.Total);
         }
 
-        return query.Skip(request.PageSize * request.Page).Take(request.PageSize);
+        return query;
     }
 }
