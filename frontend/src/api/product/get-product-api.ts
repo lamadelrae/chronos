@@ -2,7 +2,9 @@ import { api } from '@/lib/api'
 
 export interface GetProductsBody {
   page: number
-  size: number
+  size?: number | null
+  sortBy?: string | null
+  ascending?: boolean | null
 }
 
 export interface GetProductsResponse {
@@ -21,10 +23,20 @@ export interface GetProductsResponse {
 export async function getProductsApi({
   page = 0,
   size = 10,
+  ascending,
+  sortBy,
 }: GetProductsBody): Promise<GetProductsResponse> {
-  const { data } = await api.get<GetProductsResponse>(
-    `/user/product?page=${page}&size=${size}`,
-  )
+  let API_URL = `/user/product?page=${page}&size=${size}`
+
+  if (ascending !== undefined) {
+    API_URL += `&ascending=${ascending}`
+  }
+
+  if (sortBy !== undefined) {
+    API_URL += `&sortBy=${sortBy}`
+  }
+
+  const { data } = await api.get<GetProductsResponse>(API_URL)
 
   return data
 }
