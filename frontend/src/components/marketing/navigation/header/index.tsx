@@ -85,7 +85,7 @@ export function MarketingHeader() {
 
         {/* Desk log-in button */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <SignInButton variant="outline" size="xs" />
+          <SignInButton variant="accent" size="xs" />
         </div>
       </nav>
     </header>

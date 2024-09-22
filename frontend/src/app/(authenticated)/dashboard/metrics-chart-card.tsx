@@ -1,4 +1,4 @@
-import type { LucideIcon } from 'lucide-react'
+import { ArrowDown, ArrowUp, type LucideIcon } from 'lucide-react'
 import React from 'react'
 import { Area, AreaChart, XAxis } from 'recharts'
 
@@ -50,10 +50,16 @@ export function MetricsChartCard({
         </div>
 
         <p
-          className="text-xs text-muted-foreground px-6 text-rose-500 data-[positive='true']:text-emerald-600"
+          className="text-xs text-muted-foreground px-6 text-rose-500 data-[positive='true']:text-emerald-600 inline-flex items-center"
           data-positive={isPositive}
         >
-          {change.toFixed(2)}% em comparação com mês anterior
+          {isPositive ? (
+            <ArrowUp className="mr-1 size-5" />
+          ) : (
+            <ArrowDown className="mr-1 size-5" />
+          )}
+          {isPositive && '+'}
+          {change.toFixed(2)}% mês passado.
         </p>
 
         <ChartContainer
@@ -61,7 +67,7 @@ export function MetricsChartCard({
           config={{
             [dataKey]: {
               label: valueLabel,
-              color: `hsl(var(--chart-${isPositive ? '2' : '1'}))`,
+              color: `hsl(var(--chart-1))`,
             },
             [`${dataKey}LastMonth`]: {
               label: `${valueLabel} (Mês Anterior)`,
@@ -70,7 +76,7 @@ export function MetricsChartCard({
           }}
         >
           <AreaChart
-            accessibilityLayer
+            accessibilityLayer={true}
             data={chartData.map((item, index) => ({
               ...item,
               [`${dataKey}LastMonth`]: lastMonthData[index]?.[dataKey],
@@ -82,7 +88,7 @@ export function MetricsChartCard({
               bottom: 0,
             }}
           >
-            <XAxis dataKey="date" hide />
+            <XAxis dataKey="date" hide={true} />
 
             <defs>
               <linearGradient
@@ -93,14 +99,14 @@ export function MetricsChartCard({
                 y2="1"
               >
                 <stop
-                  offset="5%"
-                  stopColor={`hsl(var(--chart-${isPositive ? '2' : '1'}))`}
-                  stopOpacity={0.8}
+                  offset="40%"
+                  stopColor={`hsl(var(--chart-1))`}
+                  stopOpacity={0.6}
                 />
                 <stop
                   offset="95%"
-                  stopColor={`hsl(var(--chart-${isPositive ? '2' : '1'}))`}
-                  stopOpacity={0.1}
+                  stopColor={`hsl(var(--chart-1))`}
+                  stopOpacity={0.2}
                 />
               </linearGradient>
               <linearGradient
@@ -128,7 +134,7 @@ export function MetricsChartCard({
               type="natural"
               fill={`url(#fill-${dataKey}-${id})`}
               fillOpacity={0.4}
-              stroke={`hsl(var(--chart-${isPositive ? '2' : '1'}))`}
+              stroke={`hsl(var(--chart-1))`}
             />
 
             <Area

@@ -1,44 +1,41 @@
 'use client'
-import { DollarSign, Filter, Package2, Receipt } from 'lucide-react'
+
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+import { Calendar, DollarSign, Package2, Receipt, Store } from 'lucide-react'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 
 import { getUserMetrics } from '@/api/metrics/get-user-metrics'
-import { MetricsChartCard } from '@/components/app/cards/metrics-chart-card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import MonthPicker from '@/components/ui/month-picker'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { Skeleton } from '@/components/ui/skeleton'
 import { correctMetricsByDay } from '@/lib/helpers/metrics/correct-metrics-by-day'
 
 import { LastSalesCard } from './last-sales-card'
+import { MetricsChartCard } from './metrics-chart-card'
 import { PredictionChartCard } from './predition-chart-card'
 
 export default function Dashboard() {
   const [date, setDate] = useState(new Date())
   const month = date.getMonth()
 
-  const {
-    data: metrics,
-    error: metricsError,
-    isLoading: isMetricsLoading,
-  } = useQuery({
+  const { data: metrics, isLoading: isMetricsLoading } = useQuery({
     queryFn: () => getUserMetrics({ date }),
-    queryKey: ['user-metrics', `month-${month}`],
+    queryKey: ['metrics', `month-${month}`],
   })
 
-  if (isMetricsLoading) return null
+  const formattedDate = format(date, 'MMMM, yyyy', { locale: ptBR })
+
+  if (isMetricsLoading) {
+    return <DashboardSkeleton />
+  }
+
   if (!metrics) return null
 
   const correctedMetrics = correctMetricsByDay(metrics)
@@ -49,8 +46,8 @@ export default function Dashboard() {
         <Popover>
           <PopoverTrigger asChild>
             <Button size="xs" variant="secondary">
-              <Filter className="w-4 h-4 mr-1.5" />
-              Filtros
+              <Calendar className="w-4 h-4 mr-1.5" />
+              {formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="p-0 w-fit" align="end">
@@ -117,7 +114,7 @@ export default function Dashboard() {
           id="pmv"
           type="currency"
           title="Preço Médio de Venda"
-          icon={Package2}
+          icon={Store}
           value={correctedMetrics.current.averageSellingPrice}
           change={
             ((correctedMetrics.current.averageSellingPrice -
@@ -135,6 +132,27 @@ export default function Dashboard() {
       <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 mt-4 md:mt-8">
         <PredictionChartCard />
         <LastSalesCard />
+      </div>
+    </div>
+  )
+}
+
+function DashboardSkeleton() {
+  return (
+    <div>
+      <div className="flex items-center gap-2 justify-end">
+        <Skeleton className="h-8 w-40" />
+      </div>
+
+      <div className="grid gap-4 grid-cols-2 md:gap-8 lg:grid-cols-4 mt-4">
+        {[...Array(4)].map((_, index) => (
+          <Skeleton key={index} className="h-[200px] w-full" />
+        ))}
+      </div>
+
+      <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 mt-4 md:mt-8">
+        <Skeleton className="h-[500px] w-full col-span-2" />
+        <Skeleton className="h-[500px] w-full" />
       </div>
     </div>
   )
