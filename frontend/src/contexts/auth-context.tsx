@@ -28,6 +28,7 @@ interface AuthContextProps {
   user: User
   signIn: (payload: AuthenticateApiBody) => Promise<void>
   signOut: () => Promise<void>
+  isAuthenticating: boolean
 }
 
 const DEFAULT_PROPS: AuthContextProps = {
@@ -35,6 +36,7 @@ const DEFAULT_PROPS: AuthContextProps = {
   isAuthenticated: false,
   signIn: async () => {},
   signOut: async () => {},
+  isAuthenticating: false,
   user: {} as User,
 }
 
@@ -49,10 +51,11 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   )
   const [isLoading, setIsLoading] = useState(DEFAULT_PROPS.isLoading)
 
-  const { mutateAsync: authenticate } = useMutation({
-    mutationFn: authenticateApi,
-    mutationKey: ['authenticate'],
-  })
+  const { mutateAsync: authenticate, isLoading: isAuthenticating } =
+    useMutation({
+      mutationFn: authenticateApi,
+      mutationKey: ['authenticate'],
+    })
 
   const { mutateAsync: getUser } = useMutation({
     mutationFn: getUserApi,
@@ -132,6 +135,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
         signIn,
         signOut,
         isLoading,
+        isAuthenticating,
       }}
     >
       {children}
