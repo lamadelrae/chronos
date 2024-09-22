@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { useRouter } from 'next/navigation'
-import { parseCookies, setCookie } from 'nookies'
+import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import {
   createContext,
   type ReactNode,
@@ -89,6 +89,8 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   const signOut = useCallback(async () => {
     setUser(DEFAULT_PROPS.user)
     setIsAuthenticated(DEFAULT_PROPS.isAuthenticated)
+
+    destroyCookie(null, APP_COOKIES.AUTH_TOKEN)
 
     router.push('/')
   }, [])
