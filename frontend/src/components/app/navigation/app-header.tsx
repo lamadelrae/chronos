@@ -16,10 +16,14 @@ import {
 import { Input } from '@/components/ui/input'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { APP_NAVIGATION } from '@/constants/app-navigation'
+import { MY_ACCOUNT_NAVIGATION } from '@/constants/my-account-navigation'
+import { useAuth } from '@/hooks/use-auth'
 
 import { SmartBreadcrumbs } from './smart-breadcrumbs'
 
 export function AppHeader() {
+  const { signOut } = useAuth()
+
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <Sheet>
@@ -77,12 +81,21 @@ export function AppHeader() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
+          {MY_ACCOUNT_NAVIGATION.map((link) => (
+            <DropdownMenuItem
+              asChild
+              className="cursor-pointer"
+              key={link.name}
+            >
+              <Link href={link.path}>{link.name}</Link>
+            </DropdownMenuItem>
+          ))}
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={signOut} className="cursor-pointer">
+            Sair
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

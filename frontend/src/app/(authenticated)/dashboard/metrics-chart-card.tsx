@@ -59,7 +59,7 @@ export function MetricsChartCard({
             <ArrowDown className="mr-1 size-5" />
           )}
           {isPositive && '+'}
-          {change.toFixed(2)}% mês passado.
+          {change.toFixed(2)}% que mês passado.
         </p>
 
         <ChartContainer
