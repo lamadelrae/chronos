@@ -46,7 +46,7 @@ export function SalesTableDialog({
           <DialogTitle>Detalhes do Pedido</DialogTitle>
           <DialogDescription>{sale.id}</DialogDescription>
         </DialogHeader>
-        <div className="rounded-md border bg-white">
+        <div className="rounded-lg border bg-white">
           <Table>
             <TableHeader>
               <TableRow>
