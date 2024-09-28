@@ -38,7 +38,7 @@ export function PredictionChartCard() {
 
   const { data: productPredictions, isLoading: isPredictionsLoading } =
     useQuery({
-      queryFn: getProductPredictionApi,
+      queryFn: () => getProductPredictionApi(),
       queryKey: ['product-predictions'],
     })
 
