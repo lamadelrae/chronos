@@ -9,11 +9,16 @@ export interface GetProductPredictionItem {
   }>
 }
 
-export async function getProductPredictionApi(): Promise<
-  GetProductPredictionItem[]
-> {
-  const { data } =
-    await api.get<GetProductPredictionItem[]>(`/user/predictions`)
+export async function getProductPredictionApi(
+  productId?: string | null,
+): Promise<GetProductPredictionItem[]> {
+  let API_URL = '/user/predictions'
+
+  if (productId) {
+    API_URL += `?productId=${productId}`
+  }
+
+  const { data } = await api.get<GetProductPredictionItem[]>(API_URL)
 
   return data
 }

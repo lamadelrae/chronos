@@ -5,6 +5,7 @@ export interface GetProductsBody {
   size?: number | null
   sortBy?: string | null
   ascending?: boolean | null
+  productId?: string | null
 }
 
 export interface GetProductsResponse {
@@ -25,6 +26,7 @@ export async function getProductsApi({
   size = 10,
   ascending,
   sortBy,
+  productId,
 }: GetProductsBody): Promise<GetProductsResponse> {
   let API_URL = `/user/product?page=${page}&size=${size}`
 
@@ -34,6 +36,10 @@ export async function getProductsApi({
 
   if (sortBy !== undefined) {
     API_URL += `&sortBy=${sortBy}`
+  }
+
+  if (productId) {
+    API_URL += `&ids=[${productId}]`
   }
 
   const { data } = await api.get<GetProductsResponse>(API_URL)

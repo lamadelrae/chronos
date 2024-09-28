@@ -7,7 +7,7 @@ import {
   ShoppingCart,
 } from 'lucide-react'
 
-interface AppNavigation {
+export interface AppNavigation {
   icon: LucideIcon
   path: string
   name: string
