@@ -17,7 +17,7 @@ export function SettingsProfileCard() {
   }
 
   return (
-    <div className="border rounded-md p-4 flex justify-between items-start bg-white/50">
+    <div className="border rounded-lg p-4 flex justify-between items-start bg-white/50">
       <div className="flex items-center gap-4">
         <Avatar className="h-16 w-16">
           <AvatarFallback>
@@ -40,7 +40,7 @@ export function SettingsProfileCard() {
 
 function SettingsProfileCardSkeleton() {
   return (
-    <div className="border rounded-md p-4 flex justify-between items-start bg-white/50">
+    <div className="border rounded-lg p-4 flex justify-between items-start bg-white/50">
       <div className="flex items-center gap-4">
         <div className="h-16 w-16 rounded-full bg-gray-200 animate-pulse" />
         <div className="space-y-2">

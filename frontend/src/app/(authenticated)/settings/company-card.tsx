@@ -44,7 +44,7 @@ export function SettingsCompanyCard() {
   }
 
   return (
-    <div className="border rounded-md p-4 bg-white/50">
+    <div className="border rounded-lg p-4 bg-white/50">
       <div className="flex items-start justify-between mb-4">
         <Typography variant="h4">Empresa</Typography>
         <EditCompanyDialog />
@@ -88,7 +88,7 @@ export function SettingsCompanyCard() {
 
 function CompanyCardSkeleton() {
   return (
-    <div className="border rounded-md p-4 bg-white/50">
+    <div className="border rounded-lg p-4 bg-white/50">
       <div className="flex items-start justify-between mb-4">
         <div className="h-[28px] w-24 bg-gray-200 rounded animate-pulse" />
         <div className="h-[40px] w-24 bg-gray-200 rounded animate-pulse" />
