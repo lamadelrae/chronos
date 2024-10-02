@@ -30,7 +30,7 @@ export function getCommonPinningStyles<TData>({
     right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
     opacity: isPinned ? 0.97 : 1,
     position: isPinned ? 'sticky' : 'relative',
-    background: isPinned ? 'hsl(var(--background))' : 'hsl(var(--background))',
+    background: isPinned ? 'hsl(var(--card))' : 'hsl(var(--card))',
     width: column.getSize(),
     zIndex: isPinned ? 1 : 0,
   }
