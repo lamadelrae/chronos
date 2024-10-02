@@ -11,6 +11,7 @@ using Chronos.Api.Jobs;
 using Chronos.Api.Services;
 using Chronos.Api.Shared.Extensions;
 using Chronos.Api.Shared.Users;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -103,7 +104,11 @@ builder.Services.AddTransient<IPredictionHttpService, PredictionHttpService>();
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddScheme<AuthenticationSchemeOptions, IntegrationAuthHandler>("data-integration", null)
     .AddJwtBearer(JwtOptionsProvider.GetProvider(builder.Configuration));
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("sync-data", policy => policy.RequireRole("integrator"));
 
 var app = builder.Build();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
