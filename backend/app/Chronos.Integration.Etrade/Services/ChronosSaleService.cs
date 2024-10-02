@@ -16,7 +16,7 @@ public interface IChronosSaleService
     record CreateSaleResponse(Guid Id);
 }
 
-public class ChronosSaleService(IHttpClientFactory factory) : IChronosSaleService
+public class ChronosSaleService(IHttpClientFactory factory, IConfiguration config) : IChronosSaleService
 {
     public async Task<IChronosSaleService.CreateSaleResponse?> Post(IChronosSaleService.CreateSaleRequest sale)
     {
@@ -25,6 +25,7 @@ public class ChronosSaleService(IHttpClientFactory factory) : IChronosSaleServic
         {
             Content = new StringContent(JsonSerializer.Serialize(sale), Encoding.UTF8, "application/json")
         };
+        request.Headers.Add("Authorization", config.GetValue<string>("Chronos:CompanyId"));
 
         var response = await client.SendAsync(request);
         if (!response.IsSuccessStatusCode)
