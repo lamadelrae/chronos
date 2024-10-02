@@ -1,9 +1,11 @@
 ﻿using Chronos.Api.Handlers.Product;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chronos.Api.Controllers.Sync;
 
 [ApiController]
+[Authorize(AuthenticationSchemes = "data-integration", Policy = "sync-data")]
 [Route("api/sync/product")]
 public class ProductController(
     ISaveProductHandler saveProductHandler,
