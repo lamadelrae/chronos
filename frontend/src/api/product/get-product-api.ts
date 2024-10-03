@@ -1,4 +1,5 @@
 import { api } from '@/lib/api'
+import type { Product } from '@/types/product'
 
 export interface GetProductsBody {
   page: number
@@ -10,11 +11,7 @@ export interface GetProductsBody {
 }
 
 export interface GetProductsResponse {
-  data: Array<{
-    id: string
-    name: string
-    price: number
-  }>
+  data: Product[]
 
   totalItems: number
   pageCount: number
@@ -36,7 +33,7 @@ export async function getProductsApi({
     API_URL += `&ascending=${ascending}`
   }
 
-  if (sortBy !== undefined) {
+  if (sortBy) {
     API_URL += `&sortBy=${sortBy}`
   }
 
