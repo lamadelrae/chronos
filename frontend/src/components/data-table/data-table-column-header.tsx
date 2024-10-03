@@ -38,14 +38,14 @@ export function DataTableColumnHeader<TData, TValue>({
           <Button
             aria-label={
               column.getIsSorted() === 'desc'
-                ? 'Sorted descending. Click to sort ascending.'
+                ? 'Ordenação descendente. Clique para ordernar ascendente.'
                 : column.getIsSorted() === 'asc'
-                  ? 'Sorted ascending. Click to sort descending.'
-                  : 'Not sorted. Click to sort ascending.'
+                  ? 'Ordenação ascendente. Clique para ordernar descendente.'
+                  : 'Não ordenado. Clique para ordenar ascendente.'
             }
             variant="ghost"
             size="sm"
-            className="-ml-3 h-8 data-[state=open]:bg-accent"
+            className="-ml-3 h-8"
           >
             <span>{title}</span>
             {column.getCanSort() && column.getIsSorted() === 'desc' ? (

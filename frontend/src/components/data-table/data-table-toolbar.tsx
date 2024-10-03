@@ -60,7 +60,7 @@ export function DataTableToolbar<TData>({
                       .getColumn(String(column.value))
                       ?.setFilterValue(event.target.value)
                   }
-                  className="h-8 w-40 lg:w-64"
+                  className="h-8 w-40 lg:w-64 bg-card"
                 />
               ),
           )}

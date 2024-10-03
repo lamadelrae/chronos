@@ -1,7 +1,7 @@
 'use client'
 
-import { MixerHorizontalIcon } from '@radix-ui/react-icons'
 import type { Table } from '@tanstack/react-table'
+import { Columns3 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -25,16 +25,16 @@ export function DataTableViewOptions<TData>({
       <DropdownMenuTrigger asChild>
         <Button
           aria-label="Toggle columns"
-          variant="outline"
-          size="sm"
+          variant="secondary"
+          size="xs"
           className="ml-auto hidden h-8 lg:flex"
         >
-          <MixerHorizontalIcon className="mr-2 size-4" />
-          View
+          <Columns3 className="mr-1.5 size-4" />
+          Colunas
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuLabel>Colunas</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
           .getAllColumns()

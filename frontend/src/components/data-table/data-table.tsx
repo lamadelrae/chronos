@@ -1,4 +1,5 @@
 import { flexRender, type Table as TanstackTable } from '@tanstack/react-table'
+import { PackageX } from 'lucide-react'
 import * as React from 'react'
 
 import { DataTablePagination } from '@/components/data-table/data-table-pagination'
@@ -12,6 +13,8 @@ import {
 } from '@/components/ui/table'
 import { getCommonPinningStyles } from '@/lib/data-table'
 import { cn } from '@/lib/utils'
+
+import { Typography } from '../ui/typography'
 
 interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -96,7 +99,10 @@ export function DataTable<TData>({
                   colSpan={table.getAllColumns().length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  <div className="flex items-center justify-center flex-col gap-6">
+                    <PackageX aria-hidden />
+                    <Typography variant="h5">Sem items</Typography>
+                  </div>
                 </TableCell>
               </TableRow>
             )}
