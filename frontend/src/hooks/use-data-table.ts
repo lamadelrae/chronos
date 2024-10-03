@@ -125,9 +125,7 @@ export function useDataTable<TData>({
   const page = search.page
   const perPage =
     search.per_page ?? props.initialState?.pagination?.pageSize ?? 10
-  const sort =
-    search.sort ??
-    `${props.initialState?.sorting?.[0]?.id}.${props.initialState?.sorting?.[0]?.desc ? 'desc' : 'asc'}`
+  const sort = search.sort ?? null
   const [column, order] = sort?.split('.') ?? []
 
   // Memoize computation of searchableColumns and filterableColumns
