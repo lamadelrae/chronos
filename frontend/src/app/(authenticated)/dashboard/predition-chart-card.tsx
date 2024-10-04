@@ -76,7 +76,7 @@ export function PredictionChartCard() {
           </CardDescription>
         </div>
         <Button asChild size="sm" className="ml-auto gap-1" variant="accent">
-          <Link href="/sales">
+          <Link href="/products">
             <ArrowUpRight className="h-4 w-4" />
             Ver tudo
           </Link>
@@ -127,7 +127,7 @@ export function PredictionChartCard() {
                         </TableCell>
                         <TableCell>
                           <Button variant="outline" size="xs" asChild>
-                            <Link href="/">
+                            <Link href={`/analytics/${product.id}`}>
                               <ArrowUpRight className="h-4 w-4 mr-1.5" />
                               Detalhes
                             </Link>

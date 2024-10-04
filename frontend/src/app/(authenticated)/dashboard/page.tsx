@@ -42,7 +42,7 @@ export default function Dashboard() {
 
   return (
     <div>
-      <div className="flex items-center gap-2 justify-end">
+      <div className="flex items-center gap-2 justify-end absolute">
         <Popover>
           <PopoverTrigger asChild>
             <Button size="xs" variant="secondary">
@@ -56,7 +56,7 @@ export default function Dashboard() {
         </Popover>
       </div>
 
-      <div className="grid gap-4 grid-cols-2 md:gap-8 lg:grid-cols-4 mt-4">
+      <div className="grid gap-4 grid-cols-2 md:gap-8 lg:grid-cols-4">
         <MetricsChartCard
           id="MMR"
           type="currency"
