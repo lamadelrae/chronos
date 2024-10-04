@@ -35,7 +35,7 @@ export function SearchCommand() {
   return (
     <>
       <div
-        className="relative ml-auto flex-1 md:grow-0"
+        className="relative sm:ml-auto flex-1 md:grow-0 flex w-full items-center justify-center"
         role="button"
         onClick={() => setOpen(true)}
       >
