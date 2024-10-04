@@ -1,19 +1,11 @@
 'use client'
 
-import {
-  Copy,
-  CreditCard,
-  Download,
-  MoreVertical,
-  RefreshCcw,
-  Truck,
-} from 'lucide-react'
+import { Copy, Download, RefreshCcw } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useQuery } from 'react-query'
 import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
 
 import { getProductPredictionApi } from '@/api/prediction/get-predictions-api'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -29,22 +21,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+import { Skeleton } from '@/components/ui/skeleton'
 import { formatDate, formatUnit } from '@/lib/formatters'
 
 const chartConfig = {
@@ -65,18 +43,16 @@ export default function ProductAnalyticsPage() {
   const product = productPrediction?.[0]
 
   if (isPredictionLoading) {
-    return <div>Loading...</div>
+    return <ProductAnalyticsPageSkeleton />
   }
 
   if (!product) {
     return <div>error</div>
   }
 
-  console.log(product)
-
   const predictions = product.sales
   const totalSales = predictions.reduce((sum, pre) => sum + pre.quantity, 0)
-  const totalDays = predictions.length
+  const averageSales = totalSales / predictions.length
 
   return (
     <div>
@@ -101,31 +77,29 @@ export default function ProductAnalyticsPage() {
             </Card>
             <Card x-chunk="dashboard-05-chunk-1">
               <CardHeader className="pb-2">
-                <CardDescription>This Week</CardDescription>
-                <CardTitle className="text-4xl">$1,329</CardTitle>
+                <CardDescription>Total de Vendas</CardDescription>
+                <CardTitle className="text-4xl">
+                  {formatUnit(totalSales)}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-xs text-muted-foreground">
-                  +25% from last week
+                  Total previsto para o período
                 </div>
               </CardContent>
-              <CardFooter>
-                {/* <Progress value={25} aria-label="25% increase" /> */}
-              </CardFooter>
             </Card>
             <Card x-chunk="dashboard-05-chunk-2">
               <CardHeader className="pb-2">
-                <CardDescription>This Month</CardDescription>
-                <CardTitle className="text-4xl">$5,329</CardTitle>
+                <CardDescription>Média Diária</CardDescription>
+                <CardTitle className="text-4xl">
+                  {formatUnit(averageSales)}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-xs text-muted-foreground">
-                  +10% from last month
+                  Média de vendas por dia
                 </div>
               </CardContent>
-              <CardFooter>
-                {/* <Progress value={12} aria-label="12% increase" /> */}
-              </CardFooter>
             </Card>
           </div>
           <Card x-chunk="dashboard-05-chunk-3">
@@ -267,6 +241,75 @@ export default function ProductAnalyticsPage() {
                   {formatDate(product.sales[product.sales.length - 1].date)}
                 </time>
               </div>
+            </CardFooter>
+          </Card>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ProductAnalyticsPageSkeleton() {
+  return (
+    <div>
+      <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
+        <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2 h-full">
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+            <Card className="sm:col-span-2">
+              <CardHeader className="pb-3">
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-full mt-2" />
+                <Skeleton className="h-4 w-5/6 mt-1" />
+              </CardHeader>
+              <CardFooter>
+                <Skeleton className="h-9 w-28" />
+              </CardFooter>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-8 w-full mt-2" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-4 w-3/4" />
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-8 w-full mt-2" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-4 w-3/4" />
+              </CardContent>
+            </Card>
+          </div>
+          <Card>
+            <CardHeader className="px-7">
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-6 w-1/2 mt-2" />
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-[400px] w-full" />
+            </CardContent>
+          </Card>
+        </div>
+        <div className="h-full">
+          <Card className="overflow-hidden h-full flex flex-col">
+            <CardHeader className="flex flex-row items-start bg-muted/50">
+              <div className="grid gap-0.5">
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-1/2 mt-1" />
+              </div>
+              <div className="ml-auto">
+                <Skeleton className="h-8 w-20" />
+              </div>
+            </CardHeader>
+            <CardContent className="p-6 text-sm flex-1">
+              <Skeleton className="h-full w-full" />
+            </CardContent>
+            <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
+              <Skeleton className="h-4 w-1/2" />
             </CardFooter>
           </Card>
         </div>
