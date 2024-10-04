@@ -68,16 +68,16 @@ export function PredictionChartCard() {
 
   return (
     <Card className="xl:col-span-2">
-      <CardHeader className="flex flex-row items-center">
+      <CardHeader className="block sm:flex sm:flex-row items-center space-y-4 sm:space-y-0">
         <div className="grid gap-2">
           <CardTitle>Melhores produtos</CardTitle>
           <CardDescription>
             Os produtos com maior número de vendas desde a abertura da loja.
           </CardDescription>
         </div>
-        <Button asChild size="sm" className="ml-auto gap-1" variant="accent">
+        <Button asChild size="sm" className="sm:ml-auto" variant="accent">
           <Link href="/products">
-            <ArrowUpRight className="h-4 w-4" />
+            <ArrowUpRight className="h-4 w-4 mr-1.5" />
             Ver tudo
           </Link>
         </Button>

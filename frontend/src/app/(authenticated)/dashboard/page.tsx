@@ -42,7 +42,7 @@ export default function Dashboard() {
         <PopoverTrigger asChild>
           <Button
             size="xs"
-            className="fixed bottom-8 right-8 w-12 h-12 flex items-center justify-center rounded-full"
+            className="fixed bottom-8 right-8 w-12 h-12 flex items-center justify-center rounded-full z-10"
           >
             <Calendar />
           </Button>
@@ -52,7 +52,7 @@ export default function Dashboard() {
         </PopoverContent>
       </Popover>
 
-      <div className="grid gap-4 grid-cols-2 md:gap-8 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 md:gap-8 lg:grid-cols-4">
         <MetricsChartCard
           id="MMR"
           type="currency"
@@ -125,7 +125,7 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 mt-4 md:mt-8">
+      <div className="flex flex-col md:grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 mt-4 md:mt-8">
         <PredictionChartCard />
         <LastSalesCard />
       </div>
@@ -142,7 +142,7 @@ function DashboardSkeleton() {
         ))}
       </div>
 
-      <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 mt-4 md:mt-8">
+      <div className="flex md:grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 mt-4 md:mt-8">
         <Skeleton className="h-[500px] w-full col-span-2" />
         <Skeleton className="h-[500px] w-full" />
       </div>
