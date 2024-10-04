@@ -14,7 +14,7 @@ public interface IChronosProductService
     record UpdateProduct(Guid Id, string Name, decimal Price);
 }
 
-public class ChronosProductService(IHttpClientFactory factory) : IChronosProductService
+public class ChronosProductService(IHttpClientFactory factory, IConfiguration config) : IChronosProductService
 {
     public async Task<IChronosProductService.CreateProductResponse?> Post(IChronosProductService.CreateProductRequest product)
     {
@@ -23,6 +23,7 @@ public class ChronosProductService(IHttpClientFactory factory) : IChronosProduct
         {
             Content = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json")
         };
+        request.Headers.Add("Authorization", config.GetValue<string>("Chronos:CompanyId"));
 
         var response = await client.SendAsync(request);
         if (!response.IsSuccessStatusCode)
@@ -40,6 +41,8 @@ public class ChronosProductService(IHttpClientFactory factory) : IChronosProduct
         {
             Content = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json")
         };
+        request.Headers.Add("Authorization", config.GetValue<string>("Chronos:CompanyId"));
+
         var response = await client.SendAsync(request);
         return response.IsSuccessStatusCode;
     }
