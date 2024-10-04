@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { POSSIBLE_COLUMN_NAMES } from '@/constants/possible-column-names'
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>
@@ -50,7 +51,13 @@ export function DataTableViewOptions<TData>({
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                <span className="truncate">{column.id}</span>
+                <span className="truncate">
+                  {
+                    POSSIBLE_COLUMN_NAMES[
+                      column.id as keyof typeof POSSIBLE_COLUMN_NAMES
+                    ]
+                  }
+                </span>
               </DropdownMenuCheckboxItem>
             )
           })}

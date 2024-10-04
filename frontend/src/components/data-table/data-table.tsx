@@ -1,5 +1,4 @@
 import { flexRender, type Table as TanstackTable } from '@tanstack/react-table'
-import { PackageX } from 'lucide-react'
 import * as React from 'react'
 
 import { DataTablePagination } from '@/components/data-table/data-table-pagination'
@@ -53,6 +52,7 @@ export function DataTable<TData>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
+                      className="whitespace-pre"
                       key={header.id}
                       colSpan={header.colSpan}
                       style={{
@@ -81,6 +81,7 @@ export function DataTable<TData>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
+                      className="whitespace-pre"
                       style={{
                         ...getCommonPinningStyles({ column: cell.column }),
                       }}
@@ -99,10 +100,7 @@ export function DataTable<TData>({
                   colSpan={table.getAllColumns().length}
                   className="h-24 text-center"
                 >
-                  <div className="flex items-center justify-center flex-col gap-6">
-                    <PackageX aria-hidden />
-                    <Typography variant="h5">Sem items</Typography>
-                  </div>
+                  <Typography variant="h5">Sem items</Typography>
                 </TableCell>
               </TableRow>
             )}
