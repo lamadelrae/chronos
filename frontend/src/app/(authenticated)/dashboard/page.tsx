@@ -1,7 +1,5 @@
 'use client'
 
-import { format } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
 import { Calendar, DollarSign, Package2, Receipt, Store } from 'lucide-react'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
@@ -30,8 +28,6 @@ export default function Dashboard() {
     queryKey: ['metrics', `month-${month}`],
   })
 
-  const formattedDate = format(date, 'MMMM, yyyy', { locale: ptBR })
-
   if (isMetricsLoading) {
     return <DashboardSkeleton />
   }
@@ -42,19 +38,19 @@ export default function Dashboard() {
 
   return (
     <div>
-      <div className="flex items-center gap-2 justify-end absolute">
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button size="xs" variant="secondary">
-              <Calendar className="w-4 h-4 mr-1.5" />
-              {formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="p-0 w-fit" align="end">
-            <MonthPicker currentMonth={date} onMonthChange={setDate} />
-          </PopoverContent>
-        </Popover>
-      </div>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            size="xs"
+            className="fixed bottom-8 right-8 w-12 h-12 flex items-center justify-center rounded-full"
+          >
+            <Calendar />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="p-0 w-fit" align="end">
+          <MonthPicker currentMonth={date} onMonthChange={setDate} />
+        </PopoverContent>
+      </Popover>
 
       <div className="grid gap-4 grid-cols-2 md:gap-8 lg:grid-cols-4">
         <MetricsChartCard
@@ -140,10 +136,6 @@ export default function Dashboard() {
 function DashboardSkeleton() {
   return (
     <div>
-      <div className="flex items-center gap-2 justify-end">
-        <Skeleton className="h-8 w-40" />
-      </div>
-
       <div className="grid gap-4 grid-cols-2 md:gap-8 lg:grid-cols-4 mt-4">
         {[...Array(4)].map((_, index) => (
           <Skeleton key={index} className="h-[200px] w-full" />
