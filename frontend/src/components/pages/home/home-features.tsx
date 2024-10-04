@@ -7,19 +7,19 @@ const features = [
   {
     name: 'Predição de Estoque Avançada',
     description:
-      'Utilize algoritmos de machine learning de ponta para prever níveis de estoque com precisão incrível, reduzindo custos de armazenamento e evitando rupturas.',
+      'Utilize algoritmos de machine learning de ponta para prever níveis de estoque, reduzindo custos de armazenamento e evitando rupturas.',
     icon: Brain,
   },
   {
-    name: 'Previsão de Demanda em Tempo Real',
+    name: 'Previsão em Tempo Real',
     description:
-      'Atualize suas previsões de demanda em tempo real com base em dados de vendas, tendências de mercado e eventos externos, mantendo seu estoque sempre otimizado.',
+      'Atualize suas previsões de demanda em tempo real com base em dados de vendas, mantendo seu estoque sempre otimizado.',
     icon: Zap,
   },
   {
-    name: 'Indicadores de Desempenho de Estoque',
+    name: 'Indicadores de Desempenho',
     description:
-      'Monitore KPIs cruciais de estoque, como giro de estoque, cobertura e precisão de previsão, com dashboards intuitivos e personalizáveis.',
+      'Monitore KPIs cruciais, como faturamento, ticket médio, preço médio de venda, com dashboards intuitivos e personalizáveis.',
     icon: Gauge,
   },
 ]
@@ -27,7 +27,9 @@ const features = [
 export function HomeFeatures() {
   return (
     <div className="overflow-hidden bg-white py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 relative">
+        <div className="absolute left-0 -translate-x-1/2 w-[40vw] h-full bg-gradient-to-r from-white via-white to-transparent hidden sm:block"></div>
+
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-10 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
           <div className="lg:pr-8 lg:pt-4">
             <div className="lg:max-w-lg">
@@ -71,7 +73,7 @@ export function HomeFeatures() {
               src="/marketing/marketing_dashboard_preview.webp"
               width={1600}
               height={960}
-              className="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-foreground/10 sm:w-[57rem]"
+              className="w-[48rem] max-w-none rounded-xl sm:w-[57rem]"
             />
           </div>
         </div>

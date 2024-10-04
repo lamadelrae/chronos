@@ -9,8 +9,8 @@ export const MARKETING_NAVIGATION: MarketingNavigation[] = [
     path: '/pricing',
   },
   {
-    name: 'Sobre',
-    path: '/about',
+    name: 'Feedback',
+    path: '/feedback',
   },
   {
     name: 'Fale Conosco',
