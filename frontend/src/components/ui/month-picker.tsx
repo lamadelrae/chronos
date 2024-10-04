@@ -9,6 +9,7 @@ import {
   startOfMonth,
   startOfToday,
 } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import * as React from 'react'
 
@@ -119,7 +120,7 @@ export default function MonthPicker({
                   onClick={() => onMonthChange(month)}
                 >
                   <time dateTime={format(month, 'yyyy-MM-dd')}>
-                    {format(month, 'MMM')}
+                    {format(month, 'MMM', { locale: ptBR })}
                   </time>
                 </button>
               </div>
