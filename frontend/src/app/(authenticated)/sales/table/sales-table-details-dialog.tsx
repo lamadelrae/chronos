@@ -1,4 +1,4 @@
-import { Search } from 'lucide-react'
+import { ReceiptText } from 'lucide-react'
 
 import type { GetSalesResponse } from '@/api/sale/get-sales-api'
 import { Badge } from '@/components/ui/badge'
@@ -37,8 +37,8 @@ export function SalesTableDialog({
     <Dialog open={open} onOpenChange={onOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="xs">
-          <Search className="size-3" />
-          <span className="sr-only">Detalhes do Pedido</span>
+          <ReceiptText className="size-4 mr-1.5" />
+          Detalhes
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl">

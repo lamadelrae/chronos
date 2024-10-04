@@ -56,7 +56,7 @@ export async function getSalesApi({
     API_URL += `&ascending=${ascending}`
   }
 
-  if (sortBy !== undefined) {
+  if (sortBy) {
     API_URL += `&sortBy=${sortBy}`
   }
 
