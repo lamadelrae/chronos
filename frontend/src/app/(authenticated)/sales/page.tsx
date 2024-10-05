@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getAscendingSort } from '@/lib/helpers/search-params/get-ascending-sort'
+import { getDateRange } from '@/lib/helpers/search-params/get-date-range'
 import { getPageIndex } from '@/lib/helpers/search-params/get-page-index'
 import { getPageSize } from '@/lib/helpers/search-params/get-page-size'
 import { getSortBy } from '@/lib/helpers/search-params/get-sort-by'
@@ -31,16 +32,20 @@ export default function SalesPage() {
   const pageSize = getPageSize(searchParams)
   const ascending = getAscendingSort(searchParams)
   const sortBy = getSortBy(searchParams)
-  const saleName = searchParams.get('name')
+  const dateRange = getDateRange(searchParams)
+
+  console.log(dateRange)
 
   const { data: results, isLoading: isSalesLoading } = useQuery({
-    queryKey: ['sales', pageIndex, pageSize, sortBy, ascending, saleName],
+    queryKey: ['sales', pageIndex, pageSize, sortBy, ascending, dateRange],
     queryFn: () =>
       getSalesApi({
         page: pageIndex,
         size: pageSize,
         sortBy,
         ascending,
+        start: dateRange.start,
+        end: dateRange.end,
       }),
   })
 
@@ -116,12 +121,8 @@ function SalesPageSkeleton() {
         </Card>
         <Card className="h-full">
           <CardHeader className="pb-2">
-            <CardDescription>
-              <Skeleton className="h-[22px] w-[132px]" />
-            </CardDescription>
-            <CardTitle className="text-4xl">
-              <Skeleton className="h-[41px] w-[83px]" />
-            </CardTitle>
+            <Skeleton className="h-[22px] w-[132px]" />
+            <Skeleton className="h-[41px] w-[83px]" />
           </CardHeader>
           <CardContent>
             <div className="text-xs text-muted-foreground">
