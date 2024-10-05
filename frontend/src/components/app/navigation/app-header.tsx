@@ -67,7 +67,7 @@ export function AppHeader() {
             className="overflow-hidden rounded-full"
           >
             <Image
-              src="https://avatars.githubusercontent.com/u/67398608"
+              src="https://images.pexels.com/photos/12898975/pexels-photo-12898975.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
               width={36}
               height={36}
               alt="Avatar"
