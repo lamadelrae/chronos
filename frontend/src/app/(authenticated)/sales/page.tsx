@@ -34,8 +34,6 @@ export default function SalesPage() {
   const sortBy = getSortBy(searchParams)
   const dateRange = getDateRange(searchParams)
 
-  console.log(dateRange)
-
   const { data: results, isLoading: isSalesLoading } = useQuery({
     queryKey: ['sales', pageIndex, pageSize, sortBy, ascending, dateRange],
     queryFn: () =>

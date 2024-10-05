@@ -21,7 +21,6 @@ export function SearchCommand() {
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      console.log(e)
       if (e.key === 'l' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
         setOpen((open) => !open)
