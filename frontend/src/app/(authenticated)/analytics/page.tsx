@@ -247,12 +247,8 @@ function AnalyticsPageSkeleton() {
         {[...Array(4)].map((_, index) => (
           <Card key={index}>
             <CardHeader className="pb-2">
-              <CardDescription>
-                <Skeleton className="h-[22px] w-[132px]" />
-              </CardDescription>
-              <CardTitle className="text-4xl">
-                <Skeleton className="h-[41px] w-[83px]" />
-              </CardTitle>
+              <Skeleton className="h-[22px] w-[132px]" />
+              <Skeleton className="h-[41px] w-[83px]" />
             </CardHeader>
             <CardContent>
               <div className="text-xs text-muted-foreground">
