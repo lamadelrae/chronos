@@ -1,41 +1,38 @@
-import { PanelLeft, Search } from 'lucide-react'
+import { PanelLeft } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
 import { ChronosLogo } from '@/components/icons/chronos-logo'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
+import { SearchCommand } from '@/components/search-command'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
-  // DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { APP_NAVIGATION } from '@/constants/app-navigation'
+import { MY_ACCOUNT_NAVIGATION } from '@/constants/my-account-navigation'
+import { useAuth } from '@/hooks/use-auth'
+
+import { SmartBreadcrumbs } from './smart-breadcrumbs'
 
 export function AppHeader() {
+  const { signOut } = useAuth()
+
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 md:static md:h-auto md:border-0 md:bg-transparent md:px-6">
       <Sheet>
         <SheetTrigger asChild>
-          <Button size="icon" variant="outline" className="sm:hidden">
+          <Button size="icon" variant="outline" className="md:hidden">
             <PanelLeft className="h-5 w-5" />
             <span className="sr-only">Abrir menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="sm:max-w-xs">
+        <SheetContent side="left" className="md:max-w-xs">
           <nav className="grid gap-6 text-lg font-medium">
             <Link
               href="/"
@@ -57,33 +54,11 @@ export function AppHeader() {
           </nav>
         </SheetContent>
       </Sheet>
-      <Breadcrumb className="hidden md:flex">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="#">Dashboard</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="#">Produtos</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Todos</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-      <div className="relative ml-auto flex-1 md:grow-0">
-        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input
-          type="search"
-          placeholder="Buscar..."
-          className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
-        />
-      </div>
+
+      <SmartBreadcrumbs />
+
+      <SearchCommand />
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -92,7 +67,7 @@ export function AppHeader() {
             className="overflow-hidden rounded-full"
           >
             <Image
-              src="https://avatars.githubusercontent.com/u/67398608"
+              src="https://images.pexels.com/photos/12898975/pexels-photo-12898975.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
               width={36}
               height={36}
               alt="Avatar"
@@ -101,12 +76,21 @@ export function AppHeader() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
+          {MY_ACCOUNT_NAVIGATION.map((link) => (
+            <DropdownMenuItem
+              asChild
+              className="cursor-pointer"
+              key={link.name}
+            >
+              <Link href={link.path}>{link.name}</Link>
+            </DropdownMenuItem>
+          ))}
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={signOut} className="cursor-pointer">
+            Sair
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

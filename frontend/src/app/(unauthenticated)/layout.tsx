@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactNode } from 'react'
 
 import { MarketingFooter } from '@/components/marketing/navigation/footer'

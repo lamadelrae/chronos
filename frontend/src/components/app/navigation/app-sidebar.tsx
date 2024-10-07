@@ -14,7 +14,7 @@ import { ChronosLogo } from '../../icons/chronos-logo'
 export function AppSidebar() {
   return (
     <TooltipProvider>
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+      <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background md:flex">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
           <Link
             href="/"
@@ -23,9 +23,13 @@ export function AppSidebar() {
             <ChronosLogo className="h-4 w-4 transition-all group-hover:scale-110" />
             <span className="sr-only">Chronos</span>
           </Link>
-          {APP_NAVIGATION.map((navigationItem) => (
+          {APP_NAVIGATION.map((navigationItem, index) => (
             <Tooltip key={navigationItem.name}>
-              <TooltipTrigger asChild>
+              <TooltipTrigger
+                className='data-[hidden="true"]:hidden'
+                data-hidden={index === APP_NAVIGATION.length - 1}
+                asChild
+              >
                 <Link
                   href={navigationItem.path}
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
@@ -44,7 +48,7 @@ export function AppSidebar() {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="#"
+                href="/settings"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
                 <Settings className="h-5 w-5" />
