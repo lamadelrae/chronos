@@ -24,6 +24,13 @@ public class FetchTopSoldProductsHandler(Context context, IUserInfo userInfo) : 
     private async Task<IEnumerable<ProductSoldStatistic>> GetProductStats()
     {
         var sql = @"
+                DECLARE @Max DATE = (
+                	SELECT
+                		MAX(CAST(Sale.Date AS DATE)) AS [Date]
+                	FROM
+                		Sale
+                	WHERE Sale.CompanyId = @companyId
+                );
                 SELECT
                 	TOP 50 
                     Product.Id,
@@ -34,7 +41,7 @@ public class FetchTopSoldProductsHandler(Context context, IUserInfo userInfo) : 
                 	Product
                 	JOIN SaleItem ON SaleItem.ProductId = Product.Id
                 	JOIN Sale ON Sale.Id = SaleItem.SaleId
-                WHERE Product.CompanyId = @companyId
+                WHERE Product.CompanyId = @companyId AND Sale.Date >= DATEADD(DAY, -35, @Max)
                 GROUP BY
                 	Product.Id,
                 	Product.Name

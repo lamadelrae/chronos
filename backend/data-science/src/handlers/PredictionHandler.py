@@ -6,10 +6,11 @@ from prophet import Prophet
 def predict(json):
     df = transform(json)
     df['y'] = np.log(df['y'])
+    df['y'] = df['y'].replace([np.inf, -np.inf], 0)
     df['ds'] = pd.to_datetime(df['ds'])
     df['day_of_week'] = df['ds'].dt.dayofweek
     df['is_weekend'] = df['day_of_week'].apply(lambda x: 1 if x >= 5 else 0)
-
+    
     model = Prophet()
     model.add_regressor('is_weekend')
     model.fit(df)
