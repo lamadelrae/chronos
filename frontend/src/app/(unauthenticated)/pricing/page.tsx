@@ -8,6 +8,7 @@ import { BrandGradient } from '@/components/brand-gradient'
 import { Button } from '@/components/ui/button'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Typography } from '@/components/ui/typography'
+import { PLAN_FREQUENCIES } from '@/constants/plan-frequencies'
 import { PLAN_OPTIONS } from '@/constants/plan-options'
 import { formatCurrency } from '@/lib/formatters'
 import { cn } from '@/lib/utils'
@@ -51,21 +52,13 @@ const faqs = [
   },
 ]
 
-const DEFAULT_PRICING_FREQUENCY = PLAN_OPTIONS.frequencies[0]
-
 export default function PricingPage() {
-  const [frequency, setFrequency] = useState(DEFAULT_PRICING_FREQUENCY)
+  const [frequency, setFrequency] = useState<'yearly' | 'monthly'>('yearly')
 
-  function handleUpdateFrequency(value: string) {
+  function handleUpdateFrequency(value: 'yearly' | 'monthly') {
     if (!value) return
 
-    const selectedFrequency = PLAN_OPTIONS.frequencies.find(
-      (fq) => fq.value === value,
-    )
-
-    if (!selectedFrequency) return
-
-    setFrequency(selectedFrequency)
+    setFrequency(value)
   }
 
   return (
@@ -86,11 +79,11 @@ export default function PricingPage() {
           <fieldset aria-label="Frequência de pagamento">
             <ToggleGroup
               type="single"
-              value={frequency.value}
+              value={frequency}
               onValueChange={handleUpdateFrequency}
               className="grid grid-cols-2 gap-x-1 rounded-full bg-white/90 py-1 px-2"
             >
-              {PLAN_OPTIONS.frequencies.map((option) => (
+              {Object.values(PLAN_FREQUENCIES).map((option) => (
                 <ToggleGroupItem
                   id={option.value}
                   key={option.value}
@@ -104,8 +97,8 @@ export default function PricingPage() {
             </ToggleGroup>
           </fieldset>
         </div>
-        <div className="isolate mx-auto mt-10 grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl lg:grid-cols-2">
-          {PLAN_OPTIONS.tiers.map((tier) => (
+        <div className="isolate mx-auto mt-10 grid grid-cols-1 gap-8 lg:grid-cols-4">
+          {Object.values(PLAN_OPTIONS).map((tier) => (
             <div
               key={tier.id}
               className={cn(
@@ -126,25 +119,25 @@ export default function PricingPage() {
                 >
                   {tier.name}
                 </Typography>
-                {tier.mostPopular ? (
-                  <Typography className="rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground absolute -top-0.5 right-0">
-                    Mais popular
-                  </Typography>
-                ) : null}
               </div>
 
               <Typography className="mt-6">{tier.description}</Typography>
 
               <div className="mt-6 flex items-baseline gap-x-1">
-                <Typography variant="h2">
-                  {formatCurrency(tier.price[frequency.value] / 100)}
+                <Typography
+                  variant="h2"
+                  className={cn({
+                    'line-through blur-[2px]': tier.onRequest,
+                  })}
+                >
+                  {formatCurrency((tier.price[frequency] as number) / 100)}
                 </Typography>
                 <Typography className="text-muted-foreground/50">
-                  {frequency.priceSuffix}
+                  {tier.onRequest ? '' : '/mês'}
                 </Typography>
               </div>
 
-              {frequency.value === 'annually' ? (
+              {frequency === 'yearly' ? (
                 <Typography className="text-accent text-sm">
                   2 meses grátis
                 </Typography>
@@ -152,11 +145,20 @@ export default function PricingPage() {
 
               <Button
                 asChild
-                variant={tier.mostPopular ? 'accent' : 'outline'}
+                variant={
+                  tier.onRequest
+                    ? 'default'
+                    : tier.mostPopular
+                      ? 'accent'
+                      : 'outline'
+                }
                 className="mt-8 w-full"
               >
-                <Link href="/sign-in" aria-describedby={tier.id}>
-                  Começar agora
+                <Link
+                  href={`${tier.onRequest ? '/contact' : '/sign-in'}`}
+                  aria-describedby={tier.id}
+                >
+                  {tier.onRequest ? 'Entre em contato' : 'Começar agora'}
                 </Link>
               </Button>
 

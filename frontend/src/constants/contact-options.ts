@@ -1,26 +1,26 @@
 export const CONTACT_OPTIONS = [
   {
-    name: 'Gabriel Lamon Lopes',
+    name: 'Gabriel Lopes',
     role: 'CFO',
-    email: 'gabriel@chronos.com',
-    phone: '+55 (11) 98765-4321',
+    email: 'gabriel-lamon@outlook.com',
+    phone: '+55 24 99912-7331',
   },
   {
-    name: 'Lucas',
+    name: 'Lucas Oliveira',
+    role: 'COO',
+    email: 'lvksounds@gmail.com',
+    phone: '+55 24 99941-2841',
+  },
+  {
+    name: 'Matthew Almeida',
     role: 'CTO',
-    email: 'lucas@chronos.com',
-    phone: '+55 (21) 98765-4321',
+    email: 'matthew.almeida572@gmail.com',
+    phone: '+55 24 99946-8185',
   },
   {
-    name: 'Sarah',
-    role: 'CMO',
-    email: 'sarah@chronos.com',
-    phone: '+55 (31) 98765-4321',
-  },
-  {
-    name: 'Matthew',
-    role: 'CEO',
-    email: 'matthew@chronos.com',
-    phone: '+55 (41) 98765-4321',
+    name: 'Sarah Souza',
+    role: 'CSO',
+    email: 'sarahcarlasouza.info@gmail.com',
+    phone: '+55 24 99941-2841',
   },
 ]
