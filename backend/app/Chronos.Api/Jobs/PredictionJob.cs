@@ -74,29 +74,86 @@ public class PredictionJob(Context dbContext, IPredictionHttpService predictionS
     private async Task<IEnumerable<DailyProductStatistic>> GetProductStats(Guid companyId)
     {
         var sql = @"
-            WITH MostSoldProducts as (
-            	SELECT TOP 50 Product.Id, MAX(Sale.Date) LastSaleDate FROM Product
-            		JOIN SaleItem ON SaleItem.ProductId = Product.Id
-            		JOIN Sale ON Sale.Id = SaleItem.SaleId
-            	WHERE Product.CompanyId = @companyId
-            	GROUP BY Product.Id
-            	ORDER BY SUM(SaleItem.Quantity) DESC
-            ),
-            SaleByDay AS (
-            	SELECT Product.Id, Product.Name, CAST(Sale.Date AS DATE) [Date], SUM(SaleItem.Quantity) Sales
-            	FROM Product
-            		JOIN SaleItem ON Product.Id = SaleItem.ProductId
-            		JOIN Sale ON Sale.Id = SaleItem.SaleId
-            	WHERE Product.CompanyId = @companyId
-            	GROUP BY Product.Id, Product.Name, CAST(Sale.Date AS DATE)
-            )
-            
-            SELECT SaleByDay.Id, Name, Date, Sales FROM SaleByDay
-            	JOIN MostSoldProducts ON SaleByDay.Id = MostSoldProducts.Id
-            WHERE 
-            	SaleByDay.Date >= DATEADD(day, -35,  MostSoldProducts.LastSaleDate) AND 
-            	SaleByDay.Date <= MostSoldProducts.LastSaleDate
-            ORDER BY Name, [Date]";
+                DECLARE @Min DATE =(
+                	SELECT
+                		MIN(CAST(Sale.Date AS DATE)) AS [Date]
+                	FROM
+                		Sale
+                	WHERE Sale.CompanyId = @companyId
+                );
+
+                DECLARE @Max DATE = (
+                	SELECT
+                		MAX(CAST(Sale.Date AS DATE)) AS [Date]
+                	FROM
+                		Sale
+                	WHERE Sale.CompanyId = @companyId
+                );
+
+                WITH DateSeries AS (
+                	SELECT
+                		@Min AS [Date]
+                	UNION
+                	ALL
+                	SELECT
+                		DATEADD(DAY, 1, [Date])
+                	FROM
+                		DateSeries
+                	WHERE
+                		[Date] < @Max
+                ),
+                MostSoldProductsInLastMonth AS (
+                	SELECT
+                		TOP 50 Product.Id,
+                		Product.Name,
+                		MAX(Sale.Date) LastSaleDate
+                	FROM
+                		Product
+                		JOIN SaleItem ON SaleItem.ProductId = Product.Id
+                		JOIN Sale ON Sale.Id = SaleItem.SaleId
+                	WHERE
+                		Product.CompanyId = @companyId AND Sale.Date >= DATEADD(DAY, -35, @Max)
+                	GROUP BY
+                		Product.Id,
+                		Product.Name
+                	ORDER BY
+                		SUM(SaleItem.Quantity) DESC
+                ),
+                SaleByDay AS (
+                	SELECT
+                		Product.Id,
+                		Product.Name,
+                		CAST(Sale.Date AS DATE) [Date],
+                		SUM(SaleItem.Quantity) Sales
+                	FROM
+                		Product
+                		JOIN SaleItem ON Product.Id = SaleItem.ProductId
+                		JOIN Sale ON Sale.Id = SaleItem.SaleId
+                	WHERE Product.CompanyId = @companyId
+                	GROUP BY
+                		Product.Id,
+                		Product.Name,
+                		CAST(Sale.Date AS DATE)
+                )
+                SELECT
+                	MostSoldProductsInLastMonth.Id,
+                	MostSoldProductsInLastMonth.Name,
+                	DateSeries.[Date],
+                	ISNULL(SaleByDay.Sales, 0) AS Sales
+                FROM
+                	DateSeries
+                	CROSS JOIN MostSoldProductsInLastMonth
+                	LEFT JOIN SaleByDay ON DateSeries.[Date] = SaleByDay.[Date] AND MostSoldProductsInLastMonth.Id = SaleByDay.Id
+                WHERE
+                	DateSeries.[Date] BETWEEN DATEADD(
+                		DAY,
+                		-35,
+                		MostSoldProductsInLastMonth.LastSaleDate
+                	)
+                	AND MostSoldProductsInLastMonth.LastSaleDate
+                ORDER BY
+                	MostSoldProductsInLastMonth.Name,
+                	DateSeries.[Date] OPTION (MAXRECURSION 0);";
 
         return await dbContext.Database.SqlQueryRaw<DailyProductStatistic>(sql, new SqlParameter("companyId", companyId)).ToListAsync();
     }
