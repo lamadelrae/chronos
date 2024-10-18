@@ -1,6 +1,7 @@
 import type { QueryClient } from 'react-query'
 
 import type { Company } from '@/types/company'
+import type { User } from '@/types/user'
 
 interface UpdateCompaniesCacheProps {
   queryClient: QueryClient
@@ -17,6 +18,24 @@ export function updateCompaniesCache({
     queryClient.setQueryData(['company'], {
       ...cached,
       ...company,
+    })
+  }
+
+  return { cached }
+}
+
+interface UpdateUserCacheProps {
+  queryClient: QueryClient
+  user: User
+}
+
+export function updateUserCache({ user, queryClient }: UpdateUserCacheProps) {
+  const cached = queryClient.getQueryData<User>(['user'])
+
+  if (cached) {
+    queryClient.setQueryData(['user'], {
+      ...cached,
+      ...user,
     })
   }
 
