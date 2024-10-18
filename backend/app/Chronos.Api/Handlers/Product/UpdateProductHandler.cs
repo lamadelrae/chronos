@@ -30,7 +30,7 @@ public class UpdateProductHandler(Context context) : IUpdateProductHandler
     private static void Validate(IUpdateProductHandler.Request request)
     {
         if (request.Id == Guid.Empty) throw new ValidationException("ProductId should be valid.");
-        if (string.IsNullOrWhiteSpace(request.Name)) throw new ValidationException("Name cannot be empty.");
+        if (string.IsNullOrWhiteSpace(request.Name) || request.Name.Length > 250) throw new ValidationException("Name must be valid.");
         if (request.Price < 0) throw new ValidationException("Price must be greater than or equal to zero.");
     }
 }

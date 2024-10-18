@@ -1,5 +1,7 @@
 ﻿using Chronos.Api.Data;
 using Chronos.Api.Entities.Enums;
+using Chronos.Api.Shared.Extensions;
+using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 
 namespace Chronos.Api.Handlers.Company;
@@ -29,7 +31,7 @@ public class SaveCompanyHandler(Context context) : ISaveCompanyHandler
             LastUpdate = DateTime.Now,
             Name = request.CompanyName,
             SocialReason = request.SocialReason,
-            Cnpj = request.Cnpj,
+            Cnpj = request.Cnpj.RemoveCnpjFormat(),
             Address = new Entities.Company.CompanyAddress
             {
                 Address = request.Address.Address,
@@ -47,9 +49,13 @@ public class SaveCompanyHandler(Context context) : ISaveCompanyHandler
 
     private static void Validate(ISaveCompanyHandler.Request request)
     {
-        if (string.IsNullOrWhiteSpace(request.CompanyName)) throw new ValidationException("Name cannot be empty.");
-        if (string.IsNullOrWhiteSpace(request.SocialReason)) throw new ValidationException("Email cannot be empty.");
-        if (string.IsNullOrWhiteSpace(request.Cnpj)) throw new ValidationException("Password cannot be empty.");
+        if (string.IsNullOrWhiteSpace(request.CompanyName) || request.CompanyName.Length > 250) throw new ValidationException("Name cannot be empty.");
+        if (string.IsNullOrWhiteSpace(request.SocialReason) || request.SocialReason.Length > 250) throw new ValidationException("Email cannot be empty.");
+        if (string.IsNullOrWhiteSpace(request.Cnpj) || request.Cnpj.RemoveCnpjFormat().Length > 14 || !request.Cnpj.IsValidCnpj()) throw new ValidationException("Cnpj should be valid.");
+
         if (request.Address == null) throw new ValidationException("Address cannot be empty.");
+        if (string.IsNullOrEmpty(request.Address.Address)) throw new ValidationException("Address cannot be empty.");
+        if (string.IsNullOrEmpty(request.Address.City)) throw new ValidationException("City cannot be empty.");
+        if (string.IsNullOrEmpty(request.Address.ZipCode)) throw new ValidationException("ZipCode cannot be empty.");
     }
 }
