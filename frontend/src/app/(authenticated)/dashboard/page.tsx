@@ -42,7 +42,7 @@ export default function Dashboard() {
         <PopoverTrigger asChild>
           <Button
             size="xs"
-            className="fixed bottom-8 right-8 w-12 h-12 flex items-center justify-center rounded-full z-10"
+            className="fixed bottom-24 right-7 w-12 h-12 flex items-center justify-center rounded-full z-10"
           >
             <Calendar />
           </Button>

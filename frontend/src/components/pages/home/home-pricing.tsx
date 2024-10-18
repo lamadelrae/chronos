@@ -8,6 +8,8 @@ import { PLAN_OPTIONS } from '@/constants/plan-options'
 import { formatCurrency } from '@/lib/formatters'
 import { cn } from '@/lib/utils'
 
+const PLANS_TO_SHOW = [PLAN_OPTIONS.starter, PLAN_OPTIONS.professional]
+
 export function HomePricing() {
   return (
     <div className="relative isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
@@ -26,7 +28,7 @@ export function HomePricing() {
       </Typography>
 
       <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-2">
-        {PLAN_OPTIONS.tiers.map((tier, tierIdx) => (
+        {PLANS_TO_SHOW.map((tier, tierIdx) => (
           <div
             key={tier.id}
             className={cn(
