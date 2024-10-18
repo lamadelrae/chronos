@@ -30,7 +30,7 @@ export function SalesTable({ sales, pageCount }: SalesTableProps) {
   })
 
   return (
-    <DataTable table={table}>
+    <DataTable table={table} className="mb-20">
       <DataTableToolbar table={table}>
         <SalesTableToolbarActions table={table} />
       </DataTableToolbar>

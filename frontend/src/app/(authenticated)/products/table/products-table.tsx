@@ -58,7 +58,7 @@ export function ProductsTable({
   })
 
   return (
-    <DataTable table={table}>
+    <DataTable table={table} className="mb-20">
       <DataTableToolbar table={table} filterFields={filterFields}>
         <ProductsTableToolbarActions table={table} />
       </DataTableToolbar>
