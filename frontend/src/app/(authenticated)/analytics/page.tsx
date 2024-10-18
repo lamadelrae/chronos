@@ -109,7 +109,7 @@ export default function AnalyticsPage() {
 
   return (
     <div>
-      <div className="lg:grid lg:grid-cols-4 lg:gap-6 mb-6">
+      <div className="grid gap-6 lg:grid-cols-4 mb-6">
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>Produtos</CardDescription>
@@ -243,7 +243,7 @@ function AnalyticsEmptyState() {
 function AnalyticsPageSkeleton() {
   return (
     <div>
-      <div className="lg:grid lg:grid-cols-4 lg:gap-6 mb-6">
+      <div className="grid gap-6 lg:grid-cols-4 mb-6">
         {[...Array(4)].map((_, index) => (
           <Card key={index}>
             <CardHeader className="pb-2">
