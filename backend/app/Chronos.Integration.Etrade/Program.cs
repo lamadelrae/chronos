@@ -34,12 +34,12 @@ builder.Services.AddHttpClient("Chronos", options =>
 
 builder.Services.AddDbContext<EtradeContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetValue<string?>("Etrade:Connection"));
+    options.UseSqlServer(builder.Configuration.GetValue<string?>("Etrade:Connection"), sqlServerOptions => sqlServerOptions.CommandTimeout(600));
 });
 
 builder.Services.AddDbContext<IntegrationContext>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetValue<string?>("Integration:Connection"));
+    options.UseSqlite(builder.Configuration.GetValue<string?>("Integration:Connection"), sqlServerOptions => sqlServerOptions.CommandTimeout(600));
 });
 
 builder.Services.AddScoped<ILastSyncService, LastSyncService>();
