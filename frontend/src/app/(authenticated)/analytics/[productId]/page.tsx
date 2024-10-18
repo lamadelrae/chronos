@@ -181,8 +181,13 @@ export default function ProductAnalyticsPage() {
                   />
 
                   <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent hideLabel />}
+                    content={
+                      <ChartTooltipContent
+                        className="w-[200px]"
+                        nameKey="quantity"
+                        labelFormatter={(value) => formatDate(value)}
+                      />
+                    }
                   />
 
                   <Area
