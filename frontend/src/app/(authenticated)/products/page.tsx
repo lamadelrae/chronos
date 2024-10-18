@@ -75,11 +75,11 @@ export default function SalesPage() {
             </CardDescription>
           </CardHeader>
           <CardFooter className="mt-1.5 gap-2">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled>
               <PlusCircle className="size-4 mr-2" />
               Novo
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled>
               <ArrowUp className="size-4 mr-2" />
               Importar
             </Button>
