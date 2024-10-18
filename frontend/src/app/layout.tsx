@@ -5,6 +5,7 @@ import './globals.css'
 import { Plus_Jakarta_Sans as plusJakartaSans } from 'next/font/google'
 import { QueryClientProvider } from 'react-query'
 
+import ChatWootWidget from '@/components/chatwoot-widget'
 import { Toaster } from '@/components/ui/sonner'
 import { AuthContextProvider } from '@/contexts/auth-context'
 import { queryClient } from '@/lib/query-client'
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${jakartaSans.className} bg-background`}>
         <Toaster richColors position="bottom-center" />
+        <ChatWootWidget />
 
         <QueryClientProvider client={queryClient}>
           <AuthContextProvider>{children}</AuthContextProvider>
