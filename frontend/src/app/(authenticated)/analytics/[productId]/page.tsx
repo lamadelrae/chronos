@@ -2,8 +2,10 @@
 
 import { Copy, Download, RefreshCcw } from 'lucide-react'
 import { useParams } from 'next/navigation'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
+import { toast } from 'sonner'
 
 import { getProductPredictionApi } from '@/api/prediction/get-predictions-api'
 import { Button } from '@/components/ui/button'
@@ -34,6 +36,7 @@ const chartConfig = {
 
 export default function ProductAnalyticsPage() {
   const { productId } = useParams()
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   const { data: productPrediction, isLoading: isPredictionLoading } = useQuery({
     queryFn: () => getProductPredictionApi(productId as string),
@@ -54,10 +57,53 @@ export default function ProductAnalyticsPage() {
   const totalSales = predictions.reduce((sum, pre) => sum + pre.quantity, 0)
   const averageSales = totalSales / predictions.length
 
+  async function handleCopyProductId() {
+    if (!product) return
+
+    try {
+      await navigator.clipboard.writeText(product.productId)
+
+      toast.success('Copiado!')
+    } catch {
+      toast.error('Erro copiando, tente novamente')
+    }
+  }
+
+  const handleExtractData = () => {
+    const csvContent = [
+      ['Data', 'Quantidade'],
+      ...product.sales.map((sale) => [formatDate(sale.date), sale.quantity]),
+    ]
+      .map((e) => e.join(','))
+      .join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob)
+      link.setAttribute('href', url)
+      link.setAttribute(
+        'download',
+        `${product.productName.toLowerCase().replaceAll(' ', '_')}_vendas.csv`,
+      )
+      link.style.visibility = 'hidden'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+  }
+
+  const handleRefresh = () => {
+    setIsRefreshing(true)
+    setTimeout(() => {
+      location.reload()
+    }, 5000)
+  }
+
   return (
     <div>
-      <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-        <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2 h-full">
+      <div className="block items-start gap-4 lg:grid lg:grid-cols-3">
+        <div className="col-span-2">
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
             <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
               <CardHeader className="pb-3">
@@ -69,9 +115,16 @@ export default function ProductAnalyticsPage() {
                 </CardDescription>
               </CardHeader>
               <CardFooter>
-                <Button variant="outline" size="sm">
-                  <RefreshCcw className="size-4 mr-2" />
-                  Re-calcular
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRefresh}
+                  disabled={isRefreshing}
+                >
+                  <RefreshCcw
+                    className={`size-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`}
+                  />
+                  {isRefreshing ? 'Recalculando...' : 'Re-calcular'}
                 </Button>
               </CardFooter>
             </Card>
@@ -102,19 +155,21 @@ export default function ProductAnalyticsPage() {
               </CardContent>
             </Card>
           </div>
-          <Card x-chunk="dashboard-05-chunk-3">
+          <Card className="mt-4">
             <CardHeader className="px-7">
-              <CardDescription>
-                Com base no seu histórico de vendas,
-              </CardDescription>
-              <CardTitle>Seus próximos 10 dias de vendas</CardTitle>
+              <CardDescription>Com base no seu histórico,</CardDescription>
+              <CardTitle>Os próximos 10 dias de vendas</CardTitle>
             </CardHeader>
             <CardContent>
               <ChartContainer
                 config={chartConfig}
                 className="h-[400px] w-full lg:col-span-6"
               >
-                <LineChart accessibilityLayer={true} data={predictions}>
+                <AreaChart
+                  accessibilityLayer={true}
+                  data={predictions}
+                  margin={{ left: 12, right: 12 }}
+                >
                   <CartesianGrid vertical={false} />
 
                   <XAxis
@@ -130,19 +185,20 @@ export default function ProductAnalyticsPage() {
                     content={<ChartTooltipContent hideLabel />}
                   />
 
-                  <Line
+                  <Area
                     dataKey="quantity"
                     type="natural"
+                    fill="hsl(var(--chart-1))"
                     stroke="hsl(var(--chart-1))"
-                    strokeWidth={2}
+                    fillOpacity={0.4}
                     dot={false}
                   />
-                </LineChart>
+                </AreaChart>
               </ChartContainer>
             </CardContent>
           </Card>
         </div>
-        <div className="h-full">
+        <div className="mt-4 lg:mt-0 h-full">
           <Card className="overflow-hidden h-full flex flex-col">
             <CardHeader className="flex flex-row items-start bg-muted/50">
               <div className="grid gap-0.5">
@@ -152,6 +208,7 @@ export default function ProductAnalyticsPage() {
                     size="icon"
                     variant="outline"
                     className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
+                    onClick={handleCopyProductId}
                   >
                     <Copy className="h-3 w-3" />
                     <span className="sr-only">Copiar ID do produto</span>
@@ -162,7 +219,12 @@ export default function ProductAnalyticsPage() {
                 </CardDescription>
               </div>
               <div className="ml-auto flex items-center gap-1">
-                <Button size="sm" variant="outline" className="h-8 gap-1">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="h-8 gap-1"
+                  onClick={handleExtractData}
+                >
                   <Download className="h-3.5 w-3.5" />
                   <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
                     Extrair
