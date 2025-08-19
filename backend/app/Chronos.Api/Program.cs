@@ -2,6 +2,7 @@ using Chronos.Api.ApiConcerns;
 using Chronos.Api.Data;
 using Chronos.Api.Handlers.Auth;
 using Chronos.Api.Handlers.Company;
+using Chronos.Api.Handlers.Diary;
 using Chronos.Api.Handlers.Metrics;
 using Chronos.Api.Handlers.Prediction;
 using Chronos.Api.Handlers.Product;
@@ -98,6 +99,12 @@ builder.Services
 
 builder.Services
     .AddScoped<IFetchMetricsHandler, FetchMetricsHandler>();
+
+builder.Services
+    .AddScoped<ISaveDiaryEntryHandler, SaveDiaryEntryHandler>()
+    .AddScoped<IFetchDiaryEntriesHandler, FetchDiaryEntriesHandler>()
+    .AddScoped<IUpdateDiaryEntryHandler, UpdateDiaryEntryHandler>()
+    .AddScoped<IDeleteDiaryEntryHandler, DeleteDiaryEntryHandler>();
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 builder.Services.AddTransient<IPredictionHttpService, PredictionHttpService>();

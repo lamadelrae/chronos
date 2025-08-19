@@ -1,4 +1,5 @@
 import {
+  BookOpen,
   Home,
   LineChart,
   type LucideIcon,
@@ -28,6 +29,11 @@ export const APP_NAVIGATION: AppNavigation[] = [
     icon: Package,
     name: 'Produtos',
     path: '/products',
+  },
+  {
+    icon: BookOpen,
+    name: 'Diário',
+    path: '/diary',
   },
   {
     icon: LineChart,
