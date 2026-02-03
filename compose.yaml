@@ -1,7 +1,16 @@
 services:
   chronos-ui:
-    build: 
+    build:
       context: ./frontend/
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_API_DELAY: ${NEXT_PUBLIC_API_DELAY}
+    environment:
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NEXT_PUBLIC_API_DELAY=${NEXT_PUBLIC_API_DELAY}
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
     ports:
       - 3000:3000
   chronos-app-api:
@@ -10,32 +19,39 @@ services:
     depends_on:
       mssql:
         condition: service_healthy
+      chronos-data-science:
+        condition: service_started
     environment:
-      - ASPNETCORE_ConnectionStrings:Chronos=Server=mssql;Database=Chronos;User Id=sa;Password=${MSSQL_PASSWORD};TrustServerCertificate=True;
+      - ASPNETCORE_ConnectionStrings__Chronos=Server=mssql;Database=Chronos;User Id=sa;Password=${MSSQL_PASSWORD};TrustServerCertificate=True;
+      - Auth__PrivateKey=${AUTH_PRIVATE_KEY}
+      - Prediction__ApiUrl=http://chronos-data-science:5000
     ports:
       - 5001:5000
-  chronos-app-integration:
-    build:
-      context: ./backend/app/Chronos.Integration.Etrade/
   chronos-data-science:
     build:
       context: ./backend/data-science/src/
+    volumes:
+      - ./backend/data-science/src:/app
   mssql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    platform: linux/amd64
     healthcheck:
       test:
         [
-          "CMD",
-          "/opt/mssql-tools/bin/sqlcmd",
-          "-Usa",
-          "-P${MSSQL_PASSWORD}",
-          "-Q",
-          "select 1",
+          "CMD-SHELL",
+          "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P ${MSSQL_PASSWORD} -Q 'SELECT 1' || exit 1",
         ]
-      interval: 1s
-      retries: 30
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=${MSSQL_PASSWORD}
+      - MSSQL_SA_PASSWORD=${MSSQL_PASSWORD}
+    volumes:
+      - mssql-data:/var/opt/mssql
     ports:
       - "14333:1433"
+
+volumes:
+  mssql-data:

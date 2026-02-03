@@ -4,11 +4,16 @@ RUN apk upgrade
 
 FROM base AS builder
 
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_API_DELAY
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_DELAY=$NEXT_PUBLIC_API_DELAY
+
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml ./
+RUN npm install -g pnpm && pnpm install --frozen-lockfile && pnpm add sharp
 COPY . .
-RUN npm run build
+RUN pnpm run build
 
 FROM base AS runner
 
